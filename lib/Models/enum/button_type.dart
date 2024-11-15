@@ -1,0 +1,1 @@
+enum ButtonType {free, google, facebook, apple, login}
