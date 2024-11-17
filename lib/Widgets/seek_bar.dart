@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:marquee/marquee.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/Widgets/control_buttons.dart';
-import 'package:media_flow/bloc/musicPlayer_bloc.dart';
-import 'package:media_flow/bloc/musicPlayer_event.dart';
-import 'package:media_flow/bloc/musicPlayer_state.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 
 class SeekBar extends StatefulWidget {
   final Duration position;
@@ -53,7 +52,6 @@ class _SeekBarState extends State<SeekBar> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Spacer(),
               Flexible(
                 child: Container(
                   padding: const EdgeInsets.only(right: 13.0),
@@ -68,10 +66,8 @@ class _SeekBarState extends State<SeekBar> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-              ),
-              // Marquee(
-              //   text: title ?? "",
+              //      Marquee(
+              //   text: state.song?.name ?? "",
               //   style: const TextStyle(fontSize: 24, color: Colors.green),
               //   scrollAxis: Axis.horizontal,
               //   crossAxisAlignment: CrossAxisAlignment.center,
@@ -83,6 +79,9 @@ class _SeekBarState extends State<SeekBar> {
               //   decelerationDuration: const Duration(milliseconds: 500),
               //   decelerationCurve: Curves.easeOut,
               // ),
+                ),
+              ),
+             
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

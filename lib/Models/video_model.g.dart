@@ -1,30 +1,30 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'songs_model.dart';
+part of 'video_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SongsModelAdapter extends TypeAdapter<SongsModel> {
+class VideoModelAdapter extends TypeAdapter<VideoModel> {
   @override
   final int typeId = 1;
 
   @override
-  SongsModel read(BinaryReader reader) {
+  VideoModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return SongsModel(
+    return VideoModel(
       name: fields[1] as String?,
       path: fields[2] as String?,
-      selected: fields[3] as bool,
+      thumbnail: fields[3] as String?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, SongsModel obj) {
+  void write(BinaryWriter writer, VideoModel obj) {
     writer
       ..writeByte(3)
       ..writeByte(1)
@@ -32,7 +32,7 @@ class SongsModelAdapter extends TypeAdapter<SongsModel> {
       ..writeByte(2)
       ..write(obj.path)
       ..writeByte(3)
-      ..write(obj.selected);
+      ..write(obj.thumbnail);
   }
 
   @override
@@ -41,7 +41,7 @@ class SongsModelAdapter extends TypeAdapter<SongsModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SongsModelAdapter &&
+      other is VideoModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:media_flow/features/DocumentViewer/Screen/document_viewer.dart';
 import 'package:media_flow/features/Settings/Screen/settings_screen.dart';
-import 'package:media_flow/features/home/screens/home_screen.dart';
+import 'package:media_flow/features/Music/screens/music_player_screen.dart';
 
 class TabBarScreen extends StatefulWidget {
   const TabBarScreen({super.key, this.title});
@@ -21,7 +21,7 @@ class _TabBarScreenState extends State<TabBarScreen> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          const HomeScreen(title: "Home"),
+          const MusicPlayerScreen(title: "Music"),
           DocumentViewerScreen(),
           const SettingsPage(title: 'Settings'),
         ],

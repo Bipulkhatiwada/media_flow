@@ -24,24 +24,26 @@ class _SettingsPageState extends State<SettingsPage> {
         _secureStorage.deleteData(SecureStorageKey.passKey);
         _secureStorage.deleteData(SecureStorageKey.email);
         NavigationService.navigateToLogin(context);
-      }, context: context,
+      },
+      context: context,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(widget.title),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.green, // Green accent for AppBar
       ),
       body: Center(
         child: TextButton(
           onPressed: _logout,
           style: TextButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            backgroundColor: Colors.redAccent,
-            foregroundColor: Colors.white,
+            backgroundColor: Colors.green, // Green background for button
+            foregroundColor: Colors.black, // Black text on button
             textStyle: const TextStyle(fontSize: 16.0),
           ),
           child: const Text("Log Out"),

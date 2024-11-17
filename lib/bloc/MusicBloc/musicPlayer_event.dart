@@ -29,6 +29,9 @@ class SaveSongEvent extends MusicPlayerEvent {
 
 class FetchSongEvent extends MusicPlayerEvent {}
 
+class StopSongEvent extends MusicPlayerEvent {}
+
+
 class NextSongEvent extends MusicPlayerEvent {
    final SongsModel song;
 

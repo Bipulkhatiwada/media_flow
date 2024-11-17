@@ -8,7 +8,7 @@
         android:label="media_flow"
         android:icon="@mipmap/ic_launcher_icon"
         android:requestLegacyExternalStorage="true">
-        
+
         <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
@@ -19,12 +19,12 @@
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
-            
+
             <!-- Android Theme Metadata -->
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme" />
-            
+
             <!-- Intent Filter -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

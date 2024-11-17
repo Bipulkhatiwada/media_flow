@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:media_flow/Boxes/boxes.dart';
 import 'package:media_flow/Models/songs_model.dart';
-import 'package:media_flow/bloc/musicPlayer_event.dart';
-import 'package:media_flow/bloc/musicPlayer_state.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
@@ -16,6 +16,7 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<FetchSongEvent>(_fetchSongs);
     on<NextSongEvent>(_nextSongEvent);
     on<PrevSongEvent>(_previousSongEvent);
+    on<StopSongEvent>(_stopSong);
   }
 
   // Method to select a song
@@ -93,6 +94,9 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     } else {
       debugPrint("Permission denied");
     }
+  }
+   void _stopSong(StopSongEvent event, Emitter<MusicPlayerState> emit) async {
+   emit(state.copyWith(song: SongsModel()));
   }
 
   void _saveSongs(SaveSongEvent event, Emitter<MusicPlayerState> emit) {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:media_flow/config/Router/route_paths.dart';
@@ -26,6 +28,30 @@ class NavigationService {
       );
     }
   }
+ static void navigateToAppCoordinator(BuildContext context, {File? videoFile}) {
+  try {
+    context.push(
+      RoutePaths.appcoordinator,
+      extra: videoFile, 
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Navigation error: $e')),
+    );
+  }
+}
+  static void navigateToVideoPlayer(BuildContext context, {File? videoFile}) {
+  try {
+    context.push(
+      RoutePaths.videoPlayer,
+      extra: videoFile, 
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Navigation error: $e')),
+    );
+  }
+}
 
   static void navigateToSetupPassword(BuildContext context) {
     try {

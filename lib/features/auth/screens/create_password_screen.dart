@@ -80,7 +80,7 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                       SecureStorage().saveSecureData(
                           SecureStorageKey.passKey, _passwordController.text);
 
-                      NavigationService.navigateToTabBar(context);
+                      NavigationService.navigateToAppCoordinator(context);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Sucessfully signed in')),
                       );

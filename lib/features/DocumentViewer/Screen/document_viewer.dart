@@ -5,8 +5,9 @@ import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 
 class DocumentViewerScreen extends StatefulWidget {
+  const DocumentViewerScreen({super.key});
+
   @override
-  // ignore: 
   _DocumentViewerScreen createState() => _DocumentViewerScreen();
 }
 
@@ -37,49 +38,66 @@ class _DocumentViewerScreen extends State<DocumentViewerScreen> {
   }
 
   Future<void> getFiles(Directory rootDirectory) async {
-  try {
-    List<String> pdfList = [];
-    var files = rootDirectory.listSync(recursive: true);
+    try {
+      List<String> pdfList = [];
+      var files = rootDirectory.listSync(recursive: true);
 
-    for (var file in files) {
-      try {
-        if (file is File && file.path.endsWith('.pdf')) {
-          pdfList.add(file.path);
-        } else if (file is Directory) {
-          await getFiles(file);
+      for (var file in files) {
+        try {
+          if (file is File && file.path.endsWith('.pdf')) {
+            pdfList.add(file.path);
+          } else if (file is Directory) {
+            await getFiles(file);
+          }
+        } catch (e) {
+          debugPrint('Access denied: ${file.path}');
         }
-      } catch (e) {
-        // Skip inaccessible directories/files
-        debugPrint('Access denied: ${file.path}');
       }
-    }
 
-    pdfFiles.value = pdfList;
-  } catch (e) {
-    debugPrint(e.toString());
+      pdfFiles.value = pdfList;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF1A1A1A),
       appBar: AppBar(
-        title: Text(
+        elevation: 0,
+        backgroundColor: const Color(0xFF1A1A1A),
+        title: const Text(
           'PDF Files',
-          style: TextStyle(color: Colors.green),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: Colors.black,
-        iconTheme: IconThemeData(color: Colors.green),
       ),
-      backgroundColor: Colors.black,
       body: ValueListenableBuilder<List<String>>(
         valueListenable: pdfFiles,
         builder: (context, files, _) {
           if (files.isEmpty) {
             return Center(
-              child: Text(
-                'No PDF files found',
-                style: TextStyle(color: Colors.green),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.picture_as_pdf,
+                    size: 80,
+                    color: Colors.white.withOpacity(0.3),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'No PDF files found',
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.7),
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
               ),
             );
           }
@@ -90,24 +108,60 @@ class _DocumentViewerScreen extends State<DocumentViewerScreen> {
               String filePath = files[index];
               String fileName = path.basename(filePath);
 
-              return ListTile(
-                title: Text(
-                  fileName,
-                  style: TextStyle(color: Colors.green),
-                ),
-                leading: Image.asset(
-                'assets/images/pdf.png',
-                  height: 30,
-                  width: 30,
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PDFViewerScreen(pdfPath: filePath),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Container(
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF252525),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(16),
+                    leading: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF3A3A3A),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Image.asset(
+                        'assets/images/pdf.png',
+                        height: 30,
+                        width: 30,
+                      ),
                     ),
-                  );
-                },
+                    title: Text(
+                      fileName,
+                      maxLines: 2,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.play_circle_filled,
+                      color: Colors.white,
+                      size: 32,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PDFViewerScreen(pdfPath: filePath),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               );
             },
           );
@@ -120,20 +174,24 @@ class _DocumentViewerScreen extends State<DocumentViewerScreen> {
 class PDFViewerScreen extends StatelessWidget {
   final String pdfPath;
 
-  PDFViewerScreen({required this.pdfPath});
+  const PDFViewerScreen({super.key, required this.pdfPath});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'PDF Viewer',
-          style: TextStyle(color: Colors.green),
-        ),
-        backgroundColor: Colors.black,
-        iconTheme: IconThemeData(color: Colors.green),
-      ),
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.black,
+        title: Text(
+          path.basename(pdfPath),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: PDFView(
         filePath: pdfPath,
         onRender: (pages) {

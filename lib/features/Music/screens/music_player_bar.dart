@@ -7,14 +7,14 @@ import 'package:rxdart/rxdart.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 
-class MusicPlayer extends StatefulWidget {
-  const MusicPlayer({super.key});
+class MusicPlayerControls extends StatefulWidget {
+  const MusicPlayerControls({super.key});
 
   @override
-  _MusicPlayerState createState() => _MusicPlayerState();
+  _MusicPlayerControlsState createState() => _MusicPlayerControlsState();
 }
 
-class _MusicPlayerState extends State<MusicPlayer> {
+class _MusicPlayerControlsState extends State<MusicPlayerControls> {
   final _player = AudioPlayer();
 
   @override

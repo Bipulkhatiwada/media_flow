@@ -6,7 +6,7 @@ class MusicPlayerState extends Equatable {
   final SongsModel? song;
   final List<SongsModel>? songList;
 
-  MusicPlayerState({
+  const MusicPlayerState({
     this.song,
     this.songList,
   });
