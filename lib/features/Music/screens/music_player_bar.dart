@@ -16,23 +16,7 @@ class MusicPlayerControls extends StatefulWidget {
 
 class _MusicPlayerControlsState extends State<MusicPlayerControls> {
   final _player = AudioPlayer();
-
-  @override
-  void initState() {
-    super.initState();
-    _initializePlayer("");
-  }
-
-  Future<void> _initializePlayer(String filePath) async {
-    try {
-      await _player.setAudioSource(AudioSource.uri(Uri.parse(filePath)));
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
-    }
-  }
-
+  
   @override
   void dispose() {
     _player.dispose();
@@ -44,54 +28,43 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
         _player.positionStream,
         _player.bufferedPositionStream,
         _player.durationStream,
-        (position, bufferedPosition, duration) =>
-            PositionData(position, bufferedPosition, duration ?? Duration.zero),
+        (position, buffered, duration) => 
+            PositionData(position, buffered, duration ?? Duration.zero),
       );
 
   @override
   Widget build(BuildContext context) {
-    SongsModel? song;
-
     return BlocListener<MusicBloc, MusicPlayerState>(
-      listener: (context, state) {
-        song = state.song ?? SongsModel();
-        if (state.song?.path != null) _initializePlayer(state.song?.path ?? "");
+      listener: (context, state) async {
+        if (state.song?.path != null) {
+          try {
+            await _player.setAudioSource(
+              AudioSource.uri(Uri.parse(state.song?.path ?? ""))
+            );
+          } catch (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(e.toString()))
+            );
+          }
+        }
       },
-      child: Scaffold(
-        backgroundColor: Colors.black, 
-        body: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: BlocBuilder<MusicBloc, MusicPlayerState>(
-                builder: (context, state) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: StreamBuilder<PositionData>(
-                          stream: _positionDataStream,
-                          builder: (context, snapshot) {
-                            final positionData = snapshot.data;
-                            return SeekBar(
-                              player: _player,
-                              title: state.song?.name,
-                              duration: positionData?.duration ?? Duration.zero,
-                              position: positionData?.position ?? Duration.zero,
-                              bufferedPosition:
-                                  positionData?.bufferedPosition ?? Duration.zero,
-                              onChangeEnd: _player.seek,
-                              song: song ?? SongsModel(),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  );
-                },
+      child: Container(
+        color: Colors.black,
+        child: StreamBuilder<PositionData>(
+          stream: _positionDataStream,
+          builder: (context, snapshot) {
+            return BlocBuilder<MusicBloc, MusicPlayerState>(
+              builder: (context, state) => SeekBar(
+                player: _player,
+                title: state.song?.name,
+                duration: snapshot.data?.duration ?? Duration.zero,
+                position: snapshot.data?.position ?? Duration.zero,
+                bufferedPosition: snapshot.data?.bufferedPosition ?? Duration.zero,
+                onChangeEnd: _player.seek,
+                song: state.song ?? SongsModel(),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
@@ -102,6 +75,5 @@ class PositionData {
   final Duration position;
   final Duration bufferedPosition;
   final Duration duration;
-
   PositionData(this.position, this.bufferedPosition, this.duration);
 }

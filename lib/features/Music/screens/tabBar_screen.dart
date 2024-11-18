@@ -21,11 +21,11 @@ class _TabBarScreenState extends State<TabBarScreen> {
       backgroundColor: Colors.black, 
       body: IndexedStack(
         index: _currentIndex,
-        children: [
-          const MusicPlayerScreen(title: "My Music"),
+        children: const [
+          MusicPlayerScreen(title: "My Music"),
           DocumentViewerScreen(),
-          const VideoListScreen(),
-          const SettingsPage(title: 'Settings'),
+          VideoListScreen(),
+          SettingsPage(title: 'Settings'),
         ],
       ),
        bottomNavigationBar: Container(

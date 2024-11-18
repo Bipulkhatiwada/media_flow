@@ -15,6 +15,7 @@ class AudioFileList extends StatefulWidget {
 
 class _AudioFileListState extends State<AudioFileList> {
   final ScrollController _scrollController = ScrollController();
+  final Map<String, GlobalKey> _itemKeys = {};
 
   @override
   void initState() {
@@ -31,7 +32,7 @@ class _AudioFileListState extends State<AudioFileList> {
           if (state.songList == null || state.songList!.isEmpty) {
             return _buildEmptyState();
           } else {
-            return _buildAudioList(state.songList!);
+            return _buildAudioList(context, state.songList!);
           }
         },
       ),
@@ -100,7 +101,7 @@ class _AudioFileListState extends State<AudioFileList> {
     );
   }
 
-  Widget _buildAudioList(List<SongsModel> audioFiles) {
+  Widget _buildAudioList(BuildContext context, List<SongsModel> audioFiles) {
     return BlocListener<MusicBloc, MusicPlayerState>(
       listener: (context, state) {
         if (state.songList != null && state.song != null) {
@@ -110,7 +111,7 @@ class _AudioFileListState extends State<AudioFileList> {
           );
           int songIndex = state.songList!.indexOf(song);
           if (songIndex != -1) {
-            _scrollToIndex(songIndex);
+            _scrollToIndex(context, songIndex);
           }
         }
       },
@@ -125,20 +126,22 @@ class _AudioFileListState extends State<AudioFileList> {
             ],
           ),
         ),
-        child: ListView.builder(
+        child: SingleChildScrollView(
           controller: _scrollController,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          itemCount: audioFiles.length,
-          itemBuilder: (context, index) {
-            return _buildAudioCard(audioFiles[index]);
-          },
+          child: Column(
+            children: audioFiles.map((song) => _buildAudioCard(song)).toList(),
+          ),
         ),
       ),
     );
   }
 
   Widget _buildAudioCard(SongsModel song) {
+    _itemKeys.putIfAbsent(song.name ?? '', () => GlobalKey());
+    
     return Container(
+      key: _itemKeys[song.name ?? ''],
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -166,7 +169,6 @@ class _AudioFileListState extends State<AudioFileList> {
             padding: const EdgeInsets.all(12),
             child: Row(
               children: [
-                // Music icon with circular background
                 Container(
                   width: 50,
                   height: 50,
@@ -181,21 +183,22 @@ class _AudioFileListState extends State<AudioFileList> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                // Song title
                 Expanded(
                   child: Text(
                     song.name ?? 'Unknown',
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: song.selected ? Colors.white : Colors.white.withOpacity(0.9),
+                      color: song.selected
+                          ? Colors.white
+                          : Colors.white.withOpacity(0.9),
                       fontSize: 16,
-                      fontWeight: song.selected ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight:
+                          song.selected ? FontWeight.w600 : FontWeight.normal,
                     ),
                   ),
                 ),
                 const SizedBox(width: 12),
-                // Play button
                 Container(
                   width: 42,
                   height: 42,
@@ -207,8 +210,12 @@ class _AudioFileListState extends State<AudioFileList> {
                   ),
                   child: IconButton(
                     icon: Icon(
-                      song.selected ? Icons.pause_circle_filled : Icons.play_circle_filled,
-                      color: song.selected ? Colors.white : const Color(0xFF1DB954),
+                      song.selected
+                          ? Icons.pause_circle_filled
+                          : Icons.play_circle_filled,
+                      color: song.selected
+                          ? Colors.white
+                          : const Color(0xFF1DB954),
                       size: 24,
                     ),
                     onPressed: () => _playAudio(song),
@@ -238,14 +245,21 @@ class _AudioFileListState extends State<AudioFileList> {
     }
   }
 
-  void _scrollToIndex(int index) {
+  void _scrollToIndex(BuildContext context, int index) {
     if (index >= 0) {
-      double position = index * 80;
-      _scrollController.animateTo(
-        position,
-        duration: const Duration(seconds: 1),
-        curve: Curves.easeInOut,
-      );
+      final song = context.read<MusicBloc>().state.songList?[index];
+      if (song != null) {
+        final key = _itemKeys[song.name ?? ''];
+        if (key?.currentContext != null) {
+          Scrollable.ensureVisible(
+            key!.currentContext!,
+            duration: const Duration(seconds: 2),
+            curve: Curves.easeInOut,
+            alignment: 0.5,
+          );
+        }
+      }
     }
   }
+
 }
