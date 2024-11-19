@@ -126,13 +126,22 @@ class _AudioFileListState extends State<AudioFileList> {
             ],
           ),
         ),
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: Column(
-            children: audioFiles.map((song) => _buildAudioCard(song)).toList(),
-          ),
-        ),
+        // child: 
+        // SingleChildScrollView(
+        //   controller: _scrollController,
+        //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        //   child: Column(
+        //     children: audioFiles.map((song) => _buildAudioCard(song)).toList(),
+        //   ),
+        // ),
+        child: ListView.builder(
+        controller: _scrollController,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        itemCount: audioFiles.length,
+        itemBuilder: (context, index) {
+          return _buildAudioCard(audioFiles[index]);
+        },
+      ),
       ),
     );
   }
