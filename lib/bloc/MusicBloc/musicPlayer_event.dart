@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:media_flow/Models/songs_model.dart';
 
 class MusicPlayerEvent extends Equatable {
@@ -11,6 +12,7 @@ class MusicPlayerEvent extends Equatable {
 
 class SelectSongEvent extends MusicPlayerEvent {
   final SongsModel song;
+
 
   const SelectSongEvent({required this.song});
 
@@ -45,7 +47,7 @@ class SearchFileEvent extends MusicPlayerEvent {
 }
 
 class NextSongEvent extends MusicPlayerEvent {
-  final SongsModel song;
+    final SongsModel song;
 
   const NextSongEvent({required this.song});
 
@@ -54,7 +56,7 @@ class NextSongEvent extends MusicPlayerEvent {
 }
 
 class PrevSongEvent extends MusicPlayerEvent {
-  final SongsModel song;
+     final SongsModel song;
 
   const PrevSongEvent({required this.song});
 

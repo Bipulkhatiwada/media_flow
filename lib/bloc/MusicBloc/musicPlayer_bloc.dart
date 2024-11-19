@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:media_flow/Boxes/boxes.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
@@ -11,7 +12,7 @@ import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
-  MusicBloc() : super(const MusicPlayerState()) {
+  MusicBloc() : super( MusicPlayerState()) {
     on<SelectSongEvent>(_selectSong);
     on<SaveSongEvent>(_saveSongs);
     on<FetchSongEvent>(_fetchSongs);
@@ -24,7 +25,7 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   }
 
   // Method to select a song
-  void _selectSong(SelectSongEvent event, Emitter<MusicPlayerState> emit) {
+  void _selectSong(SelectSongEvent event, Emitter<MusicPlayerState> emit) async{
     final updatedList = state.songList?.map((newSong) {
       return SongsModel(
         name: newSong.name,
@@ -38,6 +39,9 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         song: updatedList?.firstWhere(
           (song) => song.name == event.song.name,
         )));
+    await state.audioPlayer.setAudioSource(
+              AudioSource.uri(Uri.parse(state.song?.path ?? "")));
+        
   }
 
   void _filterSong(SearchFileEvent event, Emitter<MusicPlayerState> emit) {

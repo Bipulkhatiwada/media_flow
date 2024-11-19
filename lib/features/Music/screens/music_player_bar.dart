@@ -15,38 +15,43 @@ class MusicPlayerControls extends StatefulWidget {
 }
 
 class _MusicPlayerControlsState extends State<MusicPlayerControls> {
-  final _player = AudioPlayer();
+
+  // final _player = AudioPlayer();
   
   @override
   void dispose() {
-    _player.dispose();
+context.read<MusicBloc>().state.audioPlayer.dispose();
     super.dispose();
   }
 
-  Stream<PositionData> get _positionDataStream =>
-      Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
-        _player.positionStream,
-        _player.bufferedPositionStream,
-        _player.durationStream,
+  Stream<PositionData> get _positionDataStream {
+    var player = context.read<MusicBloc>().state.audioPlayer;
+    return Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
+        player.positionStream,
+        player.bufferedPositionStream,
+        player.durationStream,
         (position, buffered, duration) => 
             PositionData(position, buffered, duration ?? Duration.zero),
       );
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return BlocListener<MusicBloc, MusicPlayerState>(
-      listener: (context, state) async {
-        if (state.song?.path != null) {
-          try {
-            await _player.setAudioSource(
-              AudioSource.uri(Uri.parse(state.song?.path ?? ""))
-            );
-          } catch (e) {
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text(e.toString())));
-          }
-        }
-      },
+      listener: (c,s){},
+      // listener: (context, state) async {
+      //   if (state.song?.path != null) {
+      //     try {
+      //       await _player.setAudioSource(
+      //         AudioSource.uri(Uri.parse(state.song?.path ?? ""))
+      //       );
+      //     } catch (e) {
+      //       ScaffoldMessenger.of(context)
+      //           .showSnackBar(SnackBar(content: Text(e.toString())));
+      //     }
+      //   }
+      // },
       child: Container(
         color: Colors.black,
         child: StreamBuilder<PositionData>(
@@ -55,13 +60,13 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
             return BlocBuilder<MusicBloc, MusicPlayerState>(
               buildWhen: (previous, current) => previous.song != current.song,
               builder: (context, state) => SeekBar(
-                player: _player,
+                player: state.audioPlayer,
                 title: state.song?.name,
                 duration: snapshot.data?.duration ?? Duration.zero,
                 position: snapshot.data?.position ?? Duration.zero,
                 bufferedPosition:
                     snapshot.data?.bufferedPosition ?? Duration.zero,
-                onChangeEnd: _player.seek,
+                onChangeEnd: state.audioPlayer.seek,
                 song: state.song ?? SongsModel(),
               ),
             );
