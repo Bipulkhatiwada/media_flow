@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:media_flow/Widgets/audio_file_list.dart';
+import 'package:media_flow/core/Navigation/navigation_service.dart';
 import 'music_player_bar.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
@@ -52,7 +53,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
           IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
             onPressed: () {
-              // Implement search functionality
+              NavigationService.navigateToSearchBar(context);
             },
           ),
           IconButton(
@@ -84,14 +85,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       thickness: 10,
                       controller: _scrollController, // Here
                       child: const AudioFileList())
-                  // RawScrollbar(
-                  //   controller: _scrollController,
-                  //   thumbColor: Colors.white.withOpacity(0.3),
-                  //   radius: const Radius.circular(20),
-                  //   thickness: 6,
-                  //   thumbVisibility: true,
-                  //   child: ,
-                  // ),
                   ),
             ),
             // Player Controls

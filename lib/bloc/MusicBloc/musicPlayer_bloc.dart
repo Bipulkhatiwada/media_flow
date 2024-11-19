@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +11,16 @@ import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
-  MusicBloc() : super(MusicPlayerState()) {
+  MusicBloc() : super(const MusicPlayerState()) {
     on<SelectSongEvent>(_selectSong);
     on<SaveSongEvent>(_saveSongs);
     on<FetchSongEvent>(_fetchSongs);
     on<NextSongEvent>(_nextSongEvent);
     on<PrevSongEvent>(_previousSongEvent);
     on<StopSongEvent>(_stopSong);
+    on<SearchFileEvent>(_filterSong);
+    on<ClearFilterSongs>(_clearfilterSong);
+    on<ShuffleMusicEvent>(_shuffleMusic);
   }
 
   // Method to select a song
@@ -32,9 +36,48 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     emit(state.copyWith(
         songList: updatedList?.toList(),
         song: updatedList?.firstWhere(
-          (song) =>
-              song.name == event.song.name, 
+          (song) => song.name == event.song.name,
         )));
+  }
+
+  void _filterSong(SearchFileEvent event, Emitter<MusicPlayerState> emit) {
+    final songList = state.songList ?? [];
+
+    final filteredList = songList
+        .where((song) =>
+            song.name?.toLowerCase().contains(event.searchText.toLowerCase()) ??
+            false)
+        .toList();
+
+    emit(state.copyWith(
+        songList: state.songList,
+        song: state.song,
+        filteredFileList: filteredList,
+        isSearching: true));
+  }
+
+  void _shuffleMusic(ShuffleMusicEvent event, Emitter<MusicPlayerState> emit) {
+    final songList = state.songList;
+    final songListLength = songList?.length ?? 0;
+
+    if (songList == null || songList.isEmpty) {
+      return;
+    }
+
+    final randomIndex = getRandomInt(0, songListLength - 1);
+    final song = songList[randomIndex];
+    emit(state.copyWith(song: song));
+    add(SelectSongEvent(song: song));
+  }
+
+  int getRandomInt(int min, int max) {
+    final random = Random();
+    return min + random.nextInt(max - min + 1);
+  }
+
+  void _clearfilterSong(
+      ClearFilterSongs event, Emitter<MusicPlayerState> emit) {
+    emit(state.copyWith(filteredFileList: []));
   }
 
   // Method for selecting the next song
@@ -95,8 +138,9 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       debugPrint("Permission denied");
     }
   }
-   void _stopSong(StopSongEvent event, Emitter<MusicPlayerState> emit) async {
-   emit(state.copyWith(song: SongsModel()));
+
+  void _stopSong(StopSongEvent event, Emitter<MusicPlayerState> emit) async {
+    emit(state.copyWith(song: SongsModel()));
   }
 
   void _saveSongs(SaveSongEvent event, Emitter<MusicPlayerState> emit) {
@@ -130,18 +174,16 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         box.addAll(newFiles); // Add only new files
       }
 
-      // Retrieve the updated list of songs
       final songs = Boxes.getData().values.toList().cast<SongsModel>();
       emit(state.copyWith(songList: songs));
 
-      // Handle duplicates (you can customize this further)
       if (duplicateFiles.isNotEmpty) {
         debugPrint(
             'Error: Duplicate files detected: ${duplicateFiles.map((e) => e.name).join(', ')}');
       }
     } catch (e) {
-      debugPrint('Error saving songs: $e'); // Log the error for debugging
-      emit(state.copyWith(songList: [])); // Emit empty list on error
+      debugPrint('Error saving songs: $e');
+      emit(state.copyWith(songList: []));
     }
   }
 

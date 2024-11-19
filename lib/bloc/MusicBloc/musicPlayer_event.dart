@@ -31,9 +31,21 @@ class FetchSongEvent extends MusicPlayerEvent {}
 
 class StopSongEvent extends MusicPlayerEvent {}
 
+class ClearFilterSongs extends MusicPlayerEvent {}
+
+class ShuffleMusicEvent extends MusicPlayerEvent {}
+
+class SearchFileEvent extends MusicPlayerEvent {
+  final String searchText;
+
+  const SearchFileEvent({required this.searchText});
+
+  @override
+  List<Object> get props => [searchText];
+}
 
 class NextSongEvent extends MusicPlayerEvent {
-   final SongsModel song;
+  final SongsModel song;
 
   const NextSongEvent({required this.song});
 
@@ -42,11 +54,10 @@ class NextSongEvent extends MusicPlayerEvent {
 }
 
 class PrevSongEvent extends MusicPlayerEvent {
-     final SongsModel song;
+  final SongsModel song;
 
   const PrevSongEvent({required this.song});
 
   @override
   List<Object> get props => [song];
-
 }

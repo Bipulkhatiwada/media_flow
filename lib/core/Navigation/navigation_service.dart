@@ -13,6 +13,10 @@ class NavigationService {
     context.go(RoutePaths.tab);
   }
 
+  static void navigateToSearchBar(BuildContext context) {
+    context.pushNamed('searchScreen');
+  }
+
   static void navigateToLogin(BuildContext context) {
     context.go(RoutePaths.login);
   }

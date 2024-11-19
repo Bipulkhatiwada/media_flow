@@ -7,4 +7,5 @@ class RoutePaths {
   static const String tab = '/tabBar';
   static const String videoPlayer = '/video-player';
   static const String appcoordinator = '/app-coordinator';
+  static const String SearchScreen = '/SearchScreen';
 }

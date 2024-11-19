@@ -8,4 +8,5 @@ class RouteNames {
 
   static const appcoordinator = 'appcoordinator';
   static const String videoPlayer = 'videoPlayer';
+  static const String searchScreen = 'searchScreen';
 }

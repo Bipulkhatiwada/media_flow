@@ -42,9 +42,8 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
               AudioSource.uri(Uri.parse(state.song?.path ?? ""))
             );
           } catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(e.toString()))
-            );
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.toString())));
           }
         }
       },
@@ -54,12 +53,14 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
           stream: _positionDataStream,
           builder: (context, snapshot) {
             return BlocBuilder<MusicBloc, MusicPlayerState>(
+              buildWhen: (previous, current) => previous.song != current.song,
               builder: (context, state) => SeekBar(
                 player: _player,
                 title: state.song?.name,
                 duration: snapshot.data?.duration ?? Duration.zero,
                 position: snapshot.data?.position ?? Duration.zero,
-                bufferedPosition: snapshot.data?.bufferedPosition ?? Duration.zero,
+                bufferedPosition:
+                    snapshot.data?.bufferedPosition ?? Duration.zero,
                 onChangeEnd: _player.seek,
                 song: state.song ?? SongsModel(),
               ),

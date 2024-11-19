@@ -32,19 +32,20 @@ class SeekBar extends StatefulWidget {
 }
 
 class _SeekBarState extends State<SeekBar> {
-
   @override
   void initState() {
     super.initState();
-      widget.player.playerStateStream.listen((state) {
-        if (state.processingState == ProcessingState.completed) {
-         context.read<MusicBloc>().add(NextSongEvent(song: widget.song));
-        }
-      });
+    widget.player.playerStateStream.listen((state) {
+      if (state.processingState == ProcessingState.completed) {
+        context.read<MusicBloc>().add(NextSongEvent(song: widget.song));
+      }
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<MusicBloc, MusicPlayerState>(
+      buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
         return Container(
           color: Colors.black,
@@ -66,22 +67,21 @@ class _SeekBarState extends State<SeekBar> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-              //      Marquee(
-              //   text: state.song?.name ?? "",
-              //   style: const TextStyle(fontSize: 24, color: Colors.green),
-              //   scrollAxis: Axis.horizontal,
-              //   crossAxisAlignment: CrossAxisAlignment.center,
-              //   blankSpace: 20.0,
-              //   velocity: 50.0,
-              //   startPadding: 10.0,
-              //   accelerationDuration: const Duration(seconds: 1),
-              //   accelerationCurve: Curves.linear,
-              //   decelerationDuration: const Duration(milliseconds: 500),
-              //   decelerationCurve: Curves.easeOut,
-              // ),
+                  //      Marquee(
+                  //   text: state.song?.name ?? "",
+                  //   style: const TextStyle(fontSize: 24, color: Colors.green),
+                  //   scrollAxis: Axis.horizontal,
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   blankSpace: 20.0,
+                  //   velocity: 50.0,
+                  //   startPadding: 10.0,
+                  //   accelerationDuration: const Duration(seconds: 1),
+                  //   accelerationCurve: Curves.linear,
+                  //   decelerationDuration: const Duration(milliseconds: 500),
+                  //   decelerationCurve: Curves.easeOut,
+                  // ),
                 ),
               ),
-             
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,9 +113,11 @@ class _SeekBarState extends State<SeekBar> {
                   },
                   onChangeEnd: (value) {
                     widget.onChangeEnd(Duration(milliseconds: value.toInt()));
-                    print( "Current value ::::::: $value \n max value :::::::: ${widget.duration.inMilliseconds.toDouble()}");
+                    print(
+                        "Current value ::::::: $value \n max value :::::::: ${widget.duration.inMilliseconds.toDouble()}");
 
-                    if (value == widget.duration.inMilliseconds.toDouble() + 10) {
+                    if (value ==
+                        widget.duration.inMilliseconds.toDouble() + 10) {
                       print("end######");
                     }
                   },

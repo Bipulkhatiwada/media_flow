@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media_flow/Models/songs_model.dart';
+import 'package:media_flow/Widgets/empty_screen.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
@@ -30,73 +31,47 @@ class _AudioFileListState extends State<AudioFileList> {
       body: BlocBuilder<MusicBloc, MusicPlayerState>(
         builder: (context, state) {
           if (state.songList == null || state.songList!.isEmpty) {
-            return _buildEmptyState();
+            return const EmptyScreen(
+              title: "your Audio list is empty",
+              displayIcon: Icons.music_note,
+              descriptionText: "Click add Button to add the files",
+            );
           } else {
             return _buildAudioList(context, state.songList!);
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _fetchAudioFiles,
-        elevation: 8,
-        backgroundColor: const Color(0xFF1DB954),
-        child: const Icon(Icons.add, size: 28),
-      ),
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.green.withOpacity(0.2),
-            Colors.black,
-          ],
+      floatingActionButton: ExpansionTile(
+        iconColor: Colors.green,
+        title: const SizedBox.shrink(),
+        trailing: Container(
+          height: 52,
+          width: 52,
+          decoration: BoxDecoration(
+            color: const Color(0xFF1DB954),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: const Center(
+            child: Icon(
+              Icons.arrow_drop_down,
+              color: Colors.white,
+              size: 28,
+            ),
+          ),
         ),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(25),
-              decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.music_note,
-                color: Color(0xFF1DB954),
-                size: 80,
-              ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Your Library is Empty',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 12),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
-              child: Text(
-                'Tap the + button to add your favorite audio files',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white70,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
+        children: [
+          const SizedBox(height: 16),
+          _buildFloatingActionButtonRow("addFiles"),
+          const SizedBox(height: 16),
+          _buildFloatingActionButtonRow("shuffle"),
+        ],
       ),
     );
   }
@@ -126,29 +101,21 @@ class _AudioFileListState extends State<AudioFileList> {
             ],
           ),
         ),
-        // child: 
-        // SingleChildScrollView(
-        //   controller: _scrollController,
-        //   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        //   child: Column(
-        //     children: audioFiles.map((song) => _buildAudioCard(song)).toList(),
-        //   ),
-        // ),
         child: ListView.builder(
-        controller: _scrollController,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        itemCount: audioFiles.length,
-        itemBuilder: (context, index) {
-          return _buildAudioCard(audioFiles[index]);
-        },
-      ),
+          controller: _scrollController,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          itemCount: audioFiles.length,
+          itemBuilder: (context, index) {
+            return _buildAudioCard(audioFiles[index]);
+          },
+        ),
       ),
     );
   }
 
   Widget _buildAudioCard(SongsModel song) {
     _itemKeys.putIfAbsent(song.name ?? '', () => GlobalKey());
-    
+
     return Container(
       key: _itemKeys[song.name ?? ''],
       margin: const EdgeInsets.only(bottom: 12),
@@ -187,7 +154,8 @@ class _AudioFileListState extends State<AudioFileList> {
                   ),
                   child: Icon(
                     Icons.music_note,
-                    color: song.selected ? Colors.white : const Color(0xFF1DB954),
+                    color:
+                        song.selected ? Colors.white : const Color(0xFF1DB954),
                     size: 24,
                   ),
                 ),
@@ -238,6 +206,25 @@ class _AudioFileListState extends State<AudioFileList> {
     );
   }
 
+  Widget _buildFloatingActionButtonRow(String type) {
+    return Row(
+      children: [
+        const Spacer(),
+        FloatingActionButton(
+          onPressed: type == "addFiles" ? _fetchAudioFiles : _shuffleMusic,
+          elevation: 8,
+          backgroundColor: const Color(0xFF1DB954),
+          child: Icon(
+            color: Colors.white,
+            type == "addFiles" ? Icons.add : Icons.shuffle,
+            size: 28,
+          ),
+        ),
+        const SizedBox(width: 22),
+      ],
+    );
+  }
+
   void _playAudio(SongsModel song) {
     context.read<MusicBloc>().add(SelectSongEvent(song: song));
   }
@@ -252,6 +239,10 @@ class _AudioFileListState extends State<AudioFileList> {
     if (result != null) {
       context.read<MusicBloc>().add(SaveSongEvent(songs: result.files));
     }
+  }
+
+  void _shuffleMusic() async {
+    context.read<MusicBloc>().add(ShuffleMusicEvent());
   }
 
   void _scrollToIndex(BuildContext context, int index) {
@@ -270,5 +261,4 @@ class _AudioFileListState extends State<AudioFileList> {
       }
     }
   }
-
 }
