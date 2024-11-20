@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/Widgets/empty_screen.dart';
+import 'package:media_flow/Widgets/expandable_fab.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
@@ -25,57 +26,30 @@ class _AudioFileListState extends State<AudioFileList> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF1E1E1E),
-      body: BlocBuilder<MusicBloc, MusicPlayerState>(
-        builder: (context, state) {
-          if (state.songList == null || state.songList!.isEmpty) {
-            return const EmptyScreen(
-              title: "your Audio list is empty",
-              displayIcon: Icons.music_note,
-              descriptionText: "Click add Button to add the files",
-            );
-          } else {
-            return _buildAudioList(context, state.songList!);
-          }
-        },
-      ),
-      floatingActionButton: ExpansionTile(
-        iconColor: Colors.green,
-        title: const SizedBox.shrink(),
-        trailing: Container(
-          height: 52,
-          width: 52,
-          decoration: BoxDecoration(
-            color: const Color(0xFF1DB954),
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 16,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: const Center(
-            child: Icon(
-              Icons.arrow_drop_down,
-              color: Colors.white,
-              size: 28,
-            ),
-          ),
-        ),
-        children: [
-          const SizedBox(height: 16),
-          _buildFloatingActionButtonRow("addFiles"),
-          const SizedBox(height: 16),
-          _buildFloatingActionButtonRow("shuffle"),
-        ],
-      ),
-    );
-  }
-
+  
+// Usage in your main widget:
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: const Color(0xFF1E1E1E),
+    body: BlocBuilder<MusicBloc, MusicPlayerState>(
+      builder: (context, state) {
+        if (state.songList == null || state.songList!.isEmpty) {
+          return const EmptyScreen(
+            title: "Your Audio list is empty",
+            displayIcon: Icons.music_note,
+            descriptionText: "Click add Button to add the files",
+          );
+        } else {
+          return _buildAudioList(context, state.songList!);
+        }
+      },
+    ),
+    floatingActionButton: ExpandableFab(
+      onAddFiles: _fetchAudioFiles,
+      onShuffle: _shuffleMusic,
+    ),
+  );
+}
   Widget _buildAudioList(BuildContext context, List<SongsModel> audioFiles) {
     return BlocListener<MusicBloc, MusicPlayerState>(
       listener: (context, state) {
@@ -210,24 +184,6 @@ class _AudioFileListState extends State<AudioFileList> {
     );
   }
 
-  Widget _buildFloatingActionButtonRow(String type) {
-    return Row(
-      children: [
-        const Spacer(),
-        FloatingActionButton(
-          onPressed: type == "addFiles" ? _fetchAudioFiles : _shuffleMusic,
-          elevation: 8,
-          backgroundColor: const Color(0xFF1DB954),
-          child: Icon(
-            color: Colors.white,
-            type == "addFiles" ? Icons.add : Icons.shuffle,
-            size: 28,
-          ),
-        ),
-        const SizedBox(width: 22),
-      ],
-    );
-  }
 
   void _playAudio(SongsModel song) {
     context.read<MusicBloc>().add(SelectSongEvent(song: song));
