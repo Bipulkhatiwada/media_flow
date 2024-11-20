@@ -9,6 +9,7 @@ import 'package:media_flow/Boxes/boxes.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
+import 'package:on_audio_query_forked/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
@@ -67,12 +68,15 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     if (songList == null || songList.isEmpty) {
       return;
     }
-    
+
     final randomIndex = getRandomInt(0, songListLength - 1);
     final song = songList[randomIndex];
-    emit(state.copyWith(song: song, isShuffledOn: event.toggleShuffle ? !(state.isShuffledOn ?? true) : (state.isShuffledOn ?? true)));
+    emit(state.copyWith(
+        song: song,
+        isShuffledOn: event.toggleShuffle
+            ? !(state.isShuffledOn ?? true)
+            : (state.isShuffledOn ?? true)));
     add(SelectSongEvent(song: song));
-
   }
 
   int getRandomInt(int min, int max) {
@@ -93,15 +97,15 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     if (currentSong == null) return;
     if (songs == null || songs.isEmpty) return;
 
-    if (state.isShuffledOn ?? false){
-      add( const ShuffleMusicEvent(toggleShuffle: false));
+    if (state.isShuffledOn ?? false) {
+      add(const ShuffleMusicEvent(toggleShuffle: false));
     } else {
-    final songIndex = songs.indexOf(currentSong);
-    final previousSongIndex = (songIndex + 1 + songs.length) % songs.length;
+      final songIndex = songs.indexOf(currentSong);
+      final previousSongIndex = (songIndex + 1 + songs.length) % songs.length;
 
-    final song = songs[previousSongIndex];
+      final song = songs[previousSongIndex];
 
-    add(SelectSongEvent(song: song));
+      add(SelectSongEvent(song: song));
     }
   }
 
@@ -123,34 +127,43 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
   // Fetching all songs
   void _fetchSongs(FetchSongEvent event, Emitter<MusicPlayerState> emit) async {
-    bool permissionStatus = await requestPermissionsAndFetchFiles();
-    var rootDirectory = Directory('/storage/emulated/0/music');
-    List<File> musicList = await getFiles(rootDirectory);
 
-    if (permissionStatus) {
+    // bool permissionStatus = await requestPermissionsAndFetchFiles();
+    // var rootDirectory = Directory('/storage/emulated/0/music');
+    // List<File> musicList = await getFiles(rootDirectory);
+
+    
+  final OnAudioQuery audioQuery = OnAudioQuery();
+  bool permissionStatus = await audioQuery.checkAndRequest();
+
+  if (permissionStatus) {
+    try {
+      List<SongModel> musicList = await audioQuery.querySongs(
+        sortType: null,
+        orderType: OrderType.ASC_OR_SMALLER,
+        uriType: UriType.EXTERNAL,
+        ignoreCase: true,
+      );
+
       var audioFiles = musicList.map((file) {
         return SongsModel(
-          name: file.path.split('/').last,
-          path: file.path,
+          name: file.displayName,
+          path: file.uri ?? '', // Add null safety
         );
       }).toList();
-
-      // for (var song in audioFiles) {
-      //   state.itemKeys.putIfAbsent(song.name ?? '', () => GlobalKey());
-      // }
 
       audioFiles.sort((a, b) =>
           (a.name ?? '').toLowerCase().compareTo((b.name ?? '').toLowerCase()));
 
-      emit(state.copyWith(
-        songList: audioFiles.toList(),
-      ));
-
       emit(state.copyWith(songList: audioFiles));
-    } else {
-      debugPrint("Permission denied");
+    } catch (e) {
+      debugPrint("Error fetching songs: $e");
+     
     }
+  } else {
+    debugPrint("Permission denied");
   }
+}
 
   void _stopSong(StopSongEvent event, Emitter<MusicPlayerState> emit) async {
     emit(state.copyWith(song: SongsModel()));
