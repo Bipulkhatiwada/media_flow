@@ -1,6 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:media_flow/Widgets/audio_file_list.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:media_flow/Widgets/control_buttons.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
 import 'package:media_flow/core/Navigation/navigation_service.dart';
+import 'package:media_flow/features/Music/screens/Nested%20TabBar/nested_tabBar.dart';
 import 'music_player_bar.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
@@ -21,6 +27,13 @@ class MusicPlayerScreen extends StatefulWidget {
 
 class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   final ScrollController _scrollController = ScrollController();
+  bool isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<MusicBloc>().add(FetchSongEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +72,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
           IconButton(
             icon: const Icon(Icons.more_vert, color: Colors.white),
             onPressed: () {
-              // Implement more options
+
             },
           ),
         ],
@@ -77,19 +90,15 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             stops: const [0.0, 0.3, 1.0],
           ),
         ),
-        child: Column(
+        child: 
+        Column(
           children: [
-            Expanded(
+            const Expanded(
               child: SafeArea(
-                  child: Scrollbar(
-                      thickness: 10,
-                      controller: _scrollController, // Here
-                      child: const AudioFileList())
-                  ),
+                  child:  NestedTabBar("")),
             ),
             // Player Controls
             Container(
-              height: 250,
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
@@ -112,7 +121,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                     Colors.black.withOpacity(0.2),
                     BlendMode.darken,
                   ),
-                  child: const MusicPlayerControls(),
+                  child: isExpanded
+                      ? const MusicPlayerControls()
+                      : const MiniMizedMusicPlayerControls(),
                 ),
               ),
             ),

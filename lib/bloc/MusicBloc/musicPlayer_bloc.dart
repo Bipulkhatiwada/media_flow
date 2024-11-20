@@ -145,6 +145,18 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         ignoreCase: true,
       );
 
+      List<AlbumModel> audioList = await audioQuery.queryAlbums();
+      List<AlbumModel> albumList = await audioQuery.queryAlbums();
+      List<ArtistModel> artistsList = await audioQuery.queryArtists();
+      List<PlaylistModel> playlists = await audioQuery.queryPlaylists();
+      List<GenreModel> genres = await audioQuery.queryGenres();
+      
+      debugPrint("###### audioList $audioList");
+      debugPrint("###### albumList $albumList");
+      debugPrint("###### artistsList $artistsList");
+      debugPrint("###### playlists $playlists");
+      debugPrint("###### genres $genres");
+
       var audioFiles = musicList.map((file) {
         return SongsModel(
           name: file.displayName,
