@@ -127,12 +127,6 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
   // Fetching all songs
   void _fetchSongs(FetchSongEvent event, Emitter<MusicPlayerState> emit) async {
-
-    // bool permissionStatus = await requestPermissionsAndFetchFiles();
-    // var rootDirectory = Directory('/storage/emulated/0/music');
-    // List<File> musicList = await getFiles(rootDirectory);
-
-    
   final OnAudioQuery audioQuery = OnAudioQuery();
   bool permissionStatus = await audioQuery.checkAndRequest();
 
@@ -150,7 +144,7 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       List<ArtistModel> artistsList = await audioQuery.queryArtists();
       List<PlaylistModel> playlists = await audioQuery.queryPlaylists();
       List<GenreModel> genres = await audioQuery.queryGenres();
-      
+
       debugPrint("###### audioList $audioList");
       debugPrint("###### albumList $albumList");
       debugPrint("###### artistsList $artistsList");
@@ -167,7 +161,7 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       audioFiles.sort((a, b) =>
           (a.name ?? '').toLowerCase().compareTo((b.name ?? '').toLowerCase()));
 
-      emit(state.copyWith(songList: audioFiles));
+      emit(state.copyWith(songList: audioFiles, albumList: albumList, artistList: artistsList, genreList: genres, playLists: playlists));
     } catch (e) {
       debugPrint("Error fetching songs: $e");
      

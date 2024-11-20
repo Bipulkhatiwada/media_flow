@@ -113,12 +113,8 @@ class _SeekBarState extends State<SeekBar> {
                   },
                   onChangeEnd: (value) {
                     widget.onChangeEnd(Duration(milliseconds: value.toInt()));
-                    print(
-                        "Current value ::::::: $value \n max value :::::::: ${widget.duration.inMilliseconds.toDouble()}");
-
                     if (value ==
                         widget.duration.inMilliseconds.toDouble() + 10) {
-                      print("end######");
                     }
                   },
                 ),

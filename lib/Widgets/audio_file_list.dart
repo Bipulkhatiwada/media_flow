@@ -22,7 +22,6 @@ class _AudioFileListState extends State<AudioFileList> {
   @override
   void initState() {
     super.initState();
-    context.read<MusicBloc>().add(FetchSongEvent());
   }
 
   @override

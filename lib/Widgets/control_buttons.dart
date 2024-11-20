@@ -126,3 +126,47 @@ class _ControlButtonsState extends State<ControlButtons> {
     );
   }
 }
+
+class MiniMizedControlButton extends StatefulWidget {
+  const MiniMizedControlButton({super.key, required this.player, required this.song});
+  final AudioPlayer player;
+  final SongsModel song;
+
+  @override
+  State<MiniMizedControlButton> createState() => _MiniMizedControlButtonState();
+}
+
+class _MiniMizedControlButtonState extends State<MiniMizedControlButton> {
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<MusicBloc, MusicPlayerState>(
+      listener: (context, state) {
+        if (state.song?.name != null && state.song?.name != "") {
+          widget.player.play();
+        } else {
+          widget.player.stop();
+        }
+      },
+      child: Container(
+        color: Colors.black,
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        child: Center(
+          child: StreamBuilder<PlayerState>(
+            stream: widget.player.playerStateStream,
+            builder: (context, snapshot) {
+              final isPlaying = snapshot.data?.playing ?? false;
+              return FloatingActionButton(
+                backgroundColor: Colors.transparent,
+                onPressed: isPlaying ? widget.player.pause : widget.player.play,
+                child: Icon(
+                  isPlaying ? Icons.pause : Icons.play_arrow,
+                  color: Colors.white,
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}

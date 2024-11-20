@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media_flow/Widgets/audio_file_list.dart';
+import 'package:media_flow/Widgets/dynamic_audio_folder.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 
 class NestedTabBar extends StatefulWidget {
   const NestedTabBar(this.outerTab, {super.key});
@@ -17,7 +22,8 @@ class _NestedTabBarState extends State<NestedTabBar>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
+    context.read<MusicBloc>().add(FetchSongEvent());
   }
 
   @override
@@ -34,41 +40,52 @@ class _NestedTabBarState extends State<NestedTabBar>
           color: Colors.transparent,
           child: TabBar(
             controller: _tabController,
-            labelColor: Colors.green,
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: Colors.green,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.black,
+            indicatorColor: Colors.white,
             indicatorWeight: 3,
             tabs: const [
               Tab(
                 text: 'Songs',
-                icon: Icon(Icons.music_note),
               ),
               Tab(
                 text: 'Playlists',
-                icon: Icon(Icons.playlist_play),
+              ),
+              Tab(
+                text: 'albums',
+              ),
+              Tab(
+                text: 'artists',
+              ),
+              Tab(
+                text: 'Genres(',
               ),
             ],
           ),
         ),
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: const [
-              // First tab content - Songs list
-              AudioFileList(),
-              
-              // Second tab content - Playlists view
-              Center(
-                child: Text(
-                  'Playlists Coming Soon',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+        BlocBuilder<MusicBloc, MusicPlayerState>(
+          builder: (context, state) {
+            return Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  const AudioFileList(),
+                  DynamicAudioFolderView(
+                    playlists: state.playLists ?? [],
                   ),
-                ),
+                  DynamicAudioFolderView(
+                    albums: state.albumList ?? [],
+                  ),
+                  DynamicAudioFolderView(
+                    artists: state.artistList ?? [],
+                  ),
+                  DynamicAudioFolderView(
+                    genres: state.genreList ?? [],
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ],
     );
