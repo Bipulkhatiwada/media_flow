@@ -1,15 +1,17 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 
 class ExpandableFab extends StatefulWidget {
   final void Function() onAddFiles;
   final void Function() onShuffle;
 
   const ExpandableFab({
-    Key? key,
+    super.key,
     required this.onAddFiles,
     required this.onShuffle,
-  }) : super(key: key);
+  });
 
   @override
   State<ExpandableFab> createState() => _ExpandableFabState();
@@ -52,11 +54,11 @@ class _ExpandableFabState extends State<ExpandableFab>
     });
   }
 
-  Widget _buildButton({
-    required VoidCallback onPressed,
-    required IconData icon,
-    required String tooltip,
-  }) {
+  Widget _buildButton(
+      {required VoidCallback onPressed,
+      required IconData icon,
+      required String tooltip,
+      String? btnType}) {
     return SizedBox(
       width: 52,
       height: 52,
@@ -66,10 +68,22 @@ class _ExpandableFabState extends State<ExpandableFab>
           borderRadius: BorderRadius.circular(12),
         ),
         elevation: 4,
-        child: IconButton(
-          onPressed: onPressed,
-          icon: Icon(icon, color: Colors.white, size: 28),
-          tooltip: tooltip,
+        child: BlocBuilder<MusicBloc, MusicPlayerState>(
+          buildWhen: (previous, current) =>
+              previous.isShuffledOn != current.isShuffledOn,
+          builder: (context, state) {
+            return IconButton(
+              onPressed: onPressed,
+              icon: Icon(
+                icon,
+                color: btnType == "shuffle" && (state.isShuffledOn ?? false)
+                    ? Colors.blue
+                    : Colors.white,
+                size: 28,
+              ),
+              tooltip: tooltip,
+            );
+          },
         ),
       ),
     );
@@ -90,6 +104,7 @@ class _ExpandableFabState extends State<ExpandableFab>
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildButton(
+                  btnType: "shuffle",
                   onPressed: widget.onShuffle,
                   icon: Icons.shuffle,
                   tooltip: 'Shuffle',

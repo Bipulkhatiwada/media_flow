@@ -67,11 +67,12 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     if (songList == null || songList.isEmpty) {
       return;
     }
-
+    
     final randomIndex = getRandomInt(0, songListLength - 1);
     final song = songList[randomIndex];
-    emit(state.copyWith(song: song));
+    emit(state.copyWith(song: song, isShuffledOn: event.toggleShuffle ? !(state.isShuffledOn ?? true) : (state.isShuffledOn ?? true)));
     add(SelectSongEvent(song: song));
+
   }
 
   int getRandomInt(int min, int max) {
@@ -92,12 +93,16 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     if (currentSong == null) return;
     if (songs == null || songs.isEmpty) return;
 
+    if (state.isShuffledOn ?? false){
+      add( const ShuffleMusicEvent(toggleShuffle: false));
+    } else {
     final songIndex = songs.indexOf(currentSong);
     final previousSongIndex = (songIndex + 1 + songs.length) % songs.length;
 
     final song = songs[previousSongIndex];
 
     add(SelectSongEvent(song: song));
+    }
   }
 
   // Method for selecting the previous song

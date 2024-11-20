@@ -202,6 +202,7 @@ Widget build(BuildContext context) {
   }
 
   void _shuffleMusic() async {
-    context.read<MusicBloc>().add(ShuffleMusicEvent());
+    
+    context.read<MusicBloc>().add(const ShuffleMusicEvent(toggleShuffle: true));
   }
 }

@@ -34,7 +34,15 @@ class StopSongEvent extends MusicPlayerEvent {}
 
 class ClearFilterSongs extends MusicPlayerEvent {}
 
-class ShuffleMusicEvent extends MusicPlayerEvent {}
+class ShuffleMusicEvent extends MusicPlayerEvent { 
+  final bool toggleShuffle;
+
+  const ShuffleMusicEvent({required this.toggleShuffle});
+
+  @override
+  List<Object> get props => [toggleShuffle];
+
+}
 
 class SearchFileEvent extends MusicPlayerEvent {
   final String searchText;

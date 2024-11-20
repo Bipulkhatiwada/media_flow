@@ -6,15 +6,16 @@ class MusicPlayerState extends Equatable {
   final SongsModel? song;
   final List<SongsModel>? songList;
   final List<SongsModel>? filteredFileList;
-  final bool? isSearching;
   final AudioPlayer audioPlayer;
+  final bool? isShuffledOn;
 
   MusicPlayerState({
     this.song,
     this.songList,
     this.filteredFileList,
-    this.isSearching,
     AudioPlayer? audioPlayer,
+    this.isShuffledOn = false,
+
   }) : audioPlayer = audioPlayer ?? AudioPlayer();
 
   MusicPlayerState copyWith({
@@ -23,16 +24,17 @@ class MusicPlayerState extends Equatable {
     List<SongsModel>? filteredFileList,
     bool? isSearching,
     AudioPlayer? audioPlayer,
+    bool? isShuffledOn,
   }) {
     return MusicPlayerState(
       song: song ?? this.song,
       songList: songList ?? this.songList,
       filteredFileList: filteredFileList ?? this.filteredFileList,
-      isSearching: isSearching ?? this.isSearching,
       audioPlayer: audioPlayer ?? this.audioPlayer,
+      isShuffledOn: isShuffledOn ?? this.isShuffledOn
     );
   }
 
   @override
-  List<Object?> get props => [song, songList, filteredFileList, isSearching, audioPlayer];
+  List<Object?> get props => [song, songList, filteredFileList, audioPlayer, isShuffledOn];
 }
