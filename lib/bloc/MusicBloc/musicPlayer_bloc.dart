@@ -12,7 +12,7 @@ import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
-  MusicBloc() : super( MusicPlayerState()) {
+  MusicBloc() : super(MusicPlayerState()) {
     on<SelectSongEvent>(_selectSong);
     on<SaveSongEvent>(_saveSongs);
     on<FetchSongEvent>(_fetchSongs);
@@ -25,7 +25,8 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   }
 
   // Method to select a song
-  void _selectSong(SelectSongEvent event, Emitter<MusicPlayerState> emit) async{
+  void _selectSong(
+      SelectSongEvent event, Emitter<MusicPlayerState> emit) async {
     final updatedList = state.songList?.map((newSong) {
       return SongsModel(
         name: newSong.name,
@@ -33,15 +34,14 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         selected: newSong.name == event.song.name,
       );
     }).toList();
-
     emit(state.copyWith(
         songList: updatedList?.toList(),
         song: updatedList?.firstWhere(
           (song) => song.name == event.song.name,
         )));
-    await state.audioPlayer.setAudioSource(
-              AudioSource.uri(Uri.parse(state.song?.path ?? "")));
-        
+
+    await state.audioPlayer
+        .setAudioSource(AudioSource.uri(Uri.parse(state.song?.path ?? "")));
   }
 
   void _filterSong(SearchFileEvent event, Emitter<MusicPlayerState> emit) {
@@ -129,6 +129,10 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           path: file.path,
         );
       }).toList();
+
+      // for (var song in audioFiles) {
+      //   state.itemKeys.putIfAbsent(song.name ?? '', () => GlobalKey());
+      // }
 
       audioFiles.sort((a, b) =>
           (a.name ?? '').toLowerCase().compareTo((b.name ?? '').toLowerCase()));

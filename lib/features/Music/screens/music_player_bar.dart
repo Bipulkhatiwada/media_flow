@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/Widgets/seek_bar.dart';
 import 'package:rxdart/rxdart.dart';
@@ -40,18 +39,6 @@ context.read<MusicBloc>().state.audioPlayer.dispose();
 
     return BlocListener<MusicBloc, MusicPlayerState>(
       listener: (c,s){},
-      // listener: (context, state) async {
-      //   if (state.song?.path != null) {
-      //     try {
-      //       await _player.setAudioSource(
-      //         AudioSource.uri(Uri.parse(state.song?.path ?? ""))
-      //       );
-      //     } catch (e) {
-      //       ScaffoldMessenger.of(context)
-      //           .showSnackBar(SnackBar(content: Text(e.toString())));
-      //     }
-      //   }
-      // },
       child: Container(
         color: Colors.black,
         child: StreamBuilder<PositionData>(

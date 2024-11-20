@@ -14,21 +14,22 @@ class MusicPlayerState extends Equatable {
     this.songList,
     this.filteredFileList,
     this.isSearching,
-    AudioPlayer? audioPlayer,  
-  }) : audioPlayer = audioPlayer ?? AudioPlayer(); 
+    AudioPlayer? audioPlayer,
+  }) : audioPlayer = audioPlayer ?? AudioPlayer();
 
   MusicPlayerState copyWith({
     SongsModel? song,
     List<SongsModel>? songList,
     List<SongsModel>? filteredFileList,
     bool? isSearching,
+    AudioPlayer? audioPlayer,
   }) {
     return MusicPlayerState(
       song: song ?? this.song,
       songList: songList ?? this.songList,
       filteredFileList: filteredFileList ?? this.filteredFileList,
       isSearching: isSearching ?? this.isSearching,
-      audioPlayer: audioPlayer, 
+      audioPlayer: audioPlayer ?? this.audioPlayer,
     );
   }
 
