@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Models/enum/button_type.dart';
 import 'package:media_flow/Widgets/social_loginBtn.dart';
 import 'package:media_flow/core/Navigation/navigation_service.dart';
@@ -23,7 +24,7 @@ class LoginScreen extends StatelessWidget {
                 width: double.infinity,
               ),
             ),
-            const SizedBox(height: 20),
+             SizedBox(height: 20.h),
             SocialLoginBtn(
               btnTitle: "Sign Up for free",
               buttonType: ButtonType.free,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 
@@ -60,12 +61,12 @@ class _ExpandableFabState extends State<ExpandableFab>
       required String tooltip,
       String? btnType}) {
     return SizedBox(
-      width: 52,
-      height: 52,
+      width: 52.w,
+      height: 52.h,
       child: Material(
         color: const Color(0xFF1DB954),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
         ),
         elevation: 4,
         child: BlocBuilder<MusicBloc, MusicPlayerState>(
@@ -92,8 +93,8 @@ class _ExpandableFabState extends State<ExpandableFab>
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 52,
-      height: 225,
+      width: 52.w,
+      height: 225.h,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -109,13 +110,13 @@ class _ExpandableFabState extends State<ExpandableFab>
                   icon: Icons.shuffle,
                   tooltip: 'Shuffle',
                 ),
-                const SizedBox(height: 12),
+                 SizedBox(height: 12.h),
                 _buildButton(
                   onPressed: widget.onAddFiles,
                   icon: Icons.add,
                   tooltip: 'Add Files',
                 ),
-                const SizedBox(height: 12),
+                 SizedBox(height: 12.h),
               ],
             ),
           ),

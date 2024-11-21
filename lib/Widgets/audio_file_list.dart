@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/Widgets/empty_screen.dart';
 import 'package:media_flow/Widgets/expandable_fab.dart';
@@ -78,7 +79,7 @@ Widget build(BuildContext context) {
             ),
           ),
           child: ScrollablePositionedList.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            padding:  EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
             itemCount: audioFiles.length,
             itemBuilder: (context, index) => _buildAudioCard(audioFiles[index]),
             itemScrollController: itemScrollController,
@@ -100,7 +101,7 @@ Widget build(BuildContext context) {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.2),
@@ -112,15 +113,15 @@ Widget build(BuildContext context) {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               onTap: () => _playAudio(song),
               child: Padding(
                 padding: const EdgeInsets.all(12),
                 child: Row(
                   children: [
                     Container(
-                      width: 50,
-                      height: 50,
+                      width: 50.w,
+                      height: 50.h,
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.1),
                         shape: BoxShape.circle,
@@ -133,7 +134,7 @@ Widget build(BuildContext context) {
                         size: 24,
                       ),
                     ),
-                    const SizedBox(width: 16),
+                     SizedBox(width: 16.w),
                     Expanded(
                       child: Text(
                         song.name ?? 'Unknown',
@@ -143,17 +144,17 @@ Widget build(BuildContext context) {
                           color: song.selected
                               ? Colors.white
                               : Colors.white.withOpacity(0.9),
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           fontWeight: song.selected
                               ? FontWeight.w600
                               : FontWeight.normal,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                     SizedBox(width: 12.w),
                     Container(
-                      width: 42,
-                      height: 42,
+                      width: 42.w,
+                      height: 42.h,
                       decoration: BoxDecoration(
                         color: song.selected
                             ? Colors.white.withOpacity(0.2)

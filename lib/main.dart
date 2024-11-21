@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
@@ -30,24 +31,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => MusicBloc()),
-        BlocProvider(create: (context) => VideoPlayerBloc())
-      ],
-      child: MaterialApp.router(
-        title: 'Media Flow',
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            backgroundColor: Colors.black,
-            selectedItemColor: Colors.green,
-            unselectedItemColor: Colors.grey,
+    return ScreenUtilInit(
+        designSize:  Size(MediaQuery.sizeOf(context).width, MediaQuery.sizeOf(context).height),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => MusicBloc()),
+            BlocProvider(create: (context) => VideoPlayerBloc())
+          ],
+          child: MaterialApp.router(
+            title: 'Media Flow',
+            theme: ThemeData(
+              primarySwatch: Colors.green,
+              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                backgroundColor: Colors.black,
+                selectedItemColor: Colors.green,
+                unselectedItemColor: Colors.grey,
+              ),
+            ),
+            routerConfig: AppRouter.router,
+            debugShowCheckedModeBanner: false,
           ),
-        ),
-        routerConfig: AppRouter.router,
-        debugShowCheckedModeBanner: false,
-      ),
-    );
+        ));
   }
 }

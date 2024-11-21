@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
@@ -37,7 +38,6 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log("######rebuild");
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -57,9 +57,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         ),
         title: Text(
           widget.title,
-          style: const TextStyle(
+          style:  TextStyle(
             color: Colors.white,
-            fontSize: 24,
+            fontSize: 24.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -101,12 +101,12 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             BlocBuilder<MusicBloc, MusicPlayerState>(
                 builder: (context, state) {
                   return Container(
-                    decoration: const BoxDecoration(
+                    decoration:  BoxDecoration(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
+                        topLeft: Radius.circular(30.r),
+                        topRight: Radius.circular(30.r),
                       ),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           blurRadius: 20,
                           offset: Offset(0, -5),
@@ -114,9 +114,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       ],
                     ),
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
+                      borderRadius:  BorderRadius.only(
+                        topLeft: Radius.circular(30.r),
+                        topRight: Radius.circular(30.r),
                       ),
                       child: BackdropFilter(
                         filter: ColorFilter.mode(

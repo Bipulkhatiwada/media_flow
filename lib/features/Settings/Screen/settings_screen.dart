@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Data/SecuredStorage/secure_storage.dart';
 import 'package:media_flow/Models/enum/secure_torage_keys.dart';
 import 'package:media_flow/Widgets/alert_dialog.dart';
@@ -41,10 +42,10 @@ class _SettingsPageState extends State<SettingsPage> {
         child: TextButton(
           onPressed: _logout,
           style: TextButton.styleFrom(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding:  EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
             backgroundColor: Colors.green, // Green background for button
             foregroundColor: Colors.black, // Black text on button
-            textStyle: const TextStyle(fontSize: 16.0),
+            textStyle:  TextStyle(fontSize: 16.0.sp),
           ),
           child: const Text("Log Out"),
         ),

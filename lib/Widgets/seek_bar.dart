@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/Widgets/control_buttons.dart';
@@ -55,10 +56,10 @@ class _SeekBarState extends State<SeekBar> {
             children: [
               Flexible(
                 child: Container(
-                  padding: const EdgeInsets.only(right: 13.0),
+                  padding:  EdgeInsets.only(right: 13.0.h),
                 ),
               ),
-              const SizedBox(height: 16),
+             SizedBox(height: 16.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -78,7 +79,7 @@ class _SeekBarState extends State<SeekBar> {
                   inactiveTrackColor: Colors.green.withOpacity(0.5),
                   thumbColor: Colors.green,
                   overlayColor: Colors.green.withOpacity(0.2),
-                  trackHeight: 4.0,
+                  trackHeight: 4.0.h,
                 ),
                 child: Slider(
                   value: widget.position.inMilliseconds.toDouble(),

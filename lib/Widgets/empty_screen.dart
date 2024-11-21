@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:media_flow/features/Music/screens/music_player_bar.dart';
 
 class EmptyScreen extends StatelessWidget {
 
@@ -43,24 +45,24 @@ class EmptyScreen extends StatelessWidget {
                 size: 80,
               ),
             ),
-            const SizedBox(height: 24),
+             SizedBox(height: 24.h),
              Text(
               title,
-              style: const TextStyle(
-                fontSize: 24,
+              style:  TextStyle(
+                fontSize: 24.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 12),
+             SizedBox(height: 12.h),
              Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
+              padding: EdgeInsets.symmetric(horizontal: 40.w),
               child: Text(
                 descriptionText ?? "",
-                style: const TextStyle(
-                  fontSize: 16,
+                style:  TextStyle(
+                  fontSize: 16.sp,
                   color: Colors.white70,
-                  height: 1.5,
+                  height: 1.5.h,
                 ),
                 textAlign: TextAlign.center,
               ),

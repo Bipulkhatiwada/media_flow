@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 
@@ -67,11 +68,11 @@ class _DocumentViewerScreen extends State<DocumentViewerScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: const Color(0xFF1A1A1A),
-        title: const Text(
+        title:  Text(
           'PDF Files',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 24,
+            fontSize: 24.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -89,12 +90,12 @@ class _DocumentViewerScreen extends State<DocumentViewerScreen> {
                     size: 80,
                     color: Colors.white.withOpacity(0.3),
                   ),
-                  const SizedBox(height: 16),
+                   SizedBox(height: 16.h),
                   Text(
                     'No PDF files found',
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.7),
-                      fontSize: 18,
+                      fontSize: 18.sp,
                     ),
                   ),
                 ],
@@ -109,12 +110,12 @@ class _DocumentViewerScreen extends State<DocumentViewerScreen> {
               String fileName = path.basename(filePath);
 
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:  EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 child: Container(
-                  height: 100,
+                  height: 100.h,
                   decoration: BoxDecoration(
                     color: const Color(0xFF252525),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(12.r),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withOpacity(0.2),
@@ -126,24 +127,24 @@ class _DocumentViewerScreen extends State<DocumentViewerScreen> {
                   child: ListTile(
                     contentPadding: const EdgeInsets.all(16),
                     leading: Container(
-                      width: 50,
-                      height: 50,
+                      width: 50.w,
+                      height: 50.h,
                       decoration: BoxDecoration(
                         color: const Color(0xFF3A3A3A),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: Image.asset(
                         'assets/images/pdf.png',
-                        height: 30,
-                        width: 30,
+                        height: 30.h,
+                        width: 30.w,
                       ),
                     ),
                     title: Text(
                       fileName,
                       maxLines: 2,
-                      style: const TextStyle(
+                      style:  TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -185,9 +186,9 @@ class PDFViewerScreen extends StatelessWidget {
         backgroundColor: Colors.black,
         title: Text(
           path.basename(pdfPath),
-          style: const TextStyle(
+          style:  TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: 18.sp,
           ),
         ),
         iconTheme: const IconThemeData(color: Colors.white),

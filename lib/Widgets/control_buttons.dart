@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
@@ -27,7 +28,7 @@ class _ControlButtonsState extends State<ControlButtons> {
         }
       },
       child: Container(
-        padding: const EdgeInsets.fromLTRB(16,16,16,0),
+        padding:  EdgeInsets.fromLTRB(16.w,16.h,16.w,0.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -98,8 +99,8 @@ class _ControlButtonsState extends State<ControlButtons> {
           style: const TextStyle(color: Colors.green),
         ),
         content: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxHeight: 16, // or any height you prefer
+          constraints:  BoxConstraints(
+            maxHeight: 16.h, // or any height you prefer
           ),
           child: StreamBuilder<double>(
             stream: stream,
@@ -148,7 +149,7 @@ class _MiniMizedControlButtonState extends State<MiniMizedControlButton> {
       },
       child: Container(
         color: Colors.black,
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+        padding:  EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 0.h),
         child: Center(
           child: StreamBuilder<PlayerState>(
             stream: widget.player.playerStateStream,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
 
 class DynamicAudioFolderView extends StatelessWidget {
@@ -82,34 +83,34 @@ class DynamicAudioFolderView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 120,
-            height: 120,
+            width: 120.w,
+            height: 120.h,
             decoration: BoxDecoration(
               color: const Color(0xFF1DB954).withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.music_note,
               color: const Color(0xFF1DB954),
               size: 64,
             ),
           ),
-          const SizedBox(height: 24),
-          const Text(
+           SizedBox(height: 24.h),
+           Text(
             "No Music Found",
             style: TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 24.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           Text(
             "Add some music to your device\nto see it here",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white.withOpacity(0.7),
-              fontSize: 16,
+              fontSize: 16.sp,
             ),
           ),
         ],
@@ -136,12 +137,12 @@ class DynamicAudioFolderView extends StatelessWidget {
                   color: const Color(0xFF1DB954),
                   size: 24,
                 ),
-                const SizedBox(width: 8),
+                 SizedBox(width: 8.w),
                 Text(
                   title,
-                  style: const TextStyle(
+                  style:  TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -151,7 +152,7 @@ class DynamicAudioFolderView extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding:  EdgeInsets.symmetric(horizontal: 16.w),
             itemCount: items.length,
             itemBuilder: (context, index) =>
                 _buildFolderItem(items[index], type),
@@ -199,7 +200,7 @@ class DynamicAudioFolderView extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
@@ -209,7 +210,7 @@ class DynamicAudioFolderView extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         child: Material(
            
           color: Colors.transparent,
@@ -232,7 +233,7 @@ class DynamicAudioFolderView extends StatelessWidget {
                       size: 24,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                   SizedBox(width: 16.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,18 +242,18 @@ class DynamicAudioFolderView extends StatelessWidget {
                           title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
+                          style:  TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 4),
+                         SizedBox(height: 4.h),
                         Text(
                           subtitle,
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.7),
-                            fontSize: 12,
+                            fontSize: 12.sp,
                           ),
                         ),
                       ],

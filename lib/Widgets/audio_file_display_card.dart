@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Models/songs_model.dart';
 class AudioFileDisplayCard extends StatelessWidget {
   final SongsModel song;
@@ -21,7 +22,7 @@ class AudioFileDisplayCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
@@ -33,15 +34,15 @@ class AudioFileDisplayCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           onTap: () => onPlayAudio(song),
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Row(
               children: [
                 Container(
-                  width: 50,
-                  height: 50,
+                  width: 50.w,
+                  height: 50.h,
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.1),
                     shape: BoxShape.circle,
@@ -52,7 +53,7 @@ class AudioFileDisplayCard extends StatelessWidget {
                     size: 24,
                   ),
                 ),
-                const SizedBox(width: 16),
+                 SizedBox(width: 16.w),
                 Expanded(
                   child: Text(
                     song.name ?? 'Unknown',
@@ -68,10 +69,10 @@ class AudioFileDisplayCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                 SizedBox(width: 12.w),
                 Container(
-                  width: 42,
-                  height: 42,
+                  width: 42.w,
+                  height: 42.h,
                   decoration: BoxDecoration(
                     color: song.selected
                         ? Colors.white.withOpacity(0.2)

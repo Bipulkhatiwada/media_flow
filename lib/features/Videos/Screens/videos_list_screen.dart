@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Models/video_model.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
@@ -54,28 +55,28 @@ class _VideoListScreen extends State<VideoListScreen> {
   }
 
   Widget _buildEmptyState() {
-    return const Center(
+    return  Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.music_note_rounded,
             color: Colors.greenAccent,
             size: 100,
           ),
-          SizedBox(height: 20),
-          Text(
+          SizedBox(height: 20.h),
+           Text(
             'No videos available',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 20.sp,
               fontWeight: FontWeight.bold,
               color: Colors.white70,
             ),
           ),
-          SizedBox(height: 10),
-          Text(
+          SizedBox(height: 10.h),
+           Text(
             'Add some videos to start enjoying your collection!',
-            style: TextStyle(fontSize: 16, color: Colors.white54),
+            style: TextStyle(fontSize: 16.sp, color: Colors.white54),
             textAlign: TextAlign.center,
           ),
         ],
@@ -87,7 +88,7 @@ class _VideoListScreen extends State<VideoListScreen> {
     return ListView.builder(
       controller: _scrollController,
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding:  EdgeInsets.symmetric(vertical: 16.h),
       itemCount: videoFiles.length,
       itemBuilder: (context, index) {
         return _buildVideoCard(context, videoFiles[index]);
@@ -109,7 +110,7 @@ class _VideoListScreen extends State<VideoListScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.15),
@@ -121,15 +122,15 @@ class _VideoListScreen extends State<VideoListScreen> {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Stack(
                   children: [
                     ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(12),
+                      borderRadius:  BorderRadius.vertical(
+                        top: Radius.circular(12.r),
                       ),
                       child: AspectRatio(
                         aspectRatio: 16 / 9,
@@ -157,8 +158,8 @@ class _VideoListScreen extends State<VideoListScreen> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.2),
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(12),
+                          borderRadius:  BorderRadius.vertical(
+                            top: Radius.circular(12.r),
                           ),
                         ),
                         child: Center(
@@ -188,13 +189,13 @@ class _VideoListScreen extends State<VideoListScreen> {
                         ),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.8),
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(4.r),
                         ),
-                        child: const Text(
+                        child:  Text(
                           "00:00",
                           style:  TextStyle(
                             color: Colors.white,
-                            fontSize: 12,
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -215,9 +216,9 @@ class _VideoListScreen extends State<VideoListScreen> {
                           children: [
                             Text(
                               video.name ?? 'Unknown Video',
-                              style: const TextStyle(
+                              style:  TextStyle(
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: 15.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                               maxLines: 2,
@@ -230,7 +231,7 @@ class _VideoListScreen extends State<VideoListScreen> {
                       Material(
                         color: Colors.transparent,
                         child: InkWell(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.r),
                           child: const Padding(
                             padding: EdgeInsets.all(8),
                             child: Icon(
@@ -248,18 +249,18 @@ class _VideoListScreen extends State<VideoListScreen> {
                 // Progress Bar
                 Container(
                   height: 3,
-                  decoration: const BoxDecoration(
+                  decoration:  BoxDecoration(
                     color: Colors.white24,
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(12),
-                      bottomRight: Radius.circular(12),
+                      bottomLeft: Radius.circular(12.r),
+                      bottomRight: Radius.circular(12.r),
                     ),
                   ),
                   child: FractionallySizedBox(
                     child: Container(
-                      decoration: const BoxDecoration(
+                      decoration:  BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        borderRadius: BorderRadius.all(Radius.circular(12.r)),
                       ),
                     ),
                   ),

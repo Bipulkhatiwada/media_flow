@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Data/SecuredStorage/secure_storage.dart';
 import 'package:media_flow/Models/enum/secure_torage_keys.dart';
 import 'package:media_flow/core/Navigation/navigation_service.dart';
+import 'package:media_flow/features/auth/screens/create_password_screen.dart';
 
 class SignUpEmailScreen extends StatefulWidget {
   const SignUpEmailScreen({super.key, required this.title});
@@ -64,7 +66,7 @@ class _SignUpEmailScreenState extends State<SignUpEmailScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 16),
+                 SizedBox(height: 16.h),
                 FilledButton(
                   style: FilledButton.styleFrom(
                     backgroundColor: Colors.green,

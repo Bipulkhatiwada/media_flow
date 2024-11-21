@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Models/enum/button_type.dart';
+import 'package:media_flow/features/Music/screens/music_player_bar.dart';
 
 class SocialLoginBtn extends StatelessWidget {
   const SocialLoginBtn({
@@ -53,10 +55,10 @@ class SocialLoginBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding:  EdgeInsets.symmetric(horizontal: 16.0.w, vertical: 8.0.h),
       child: SizedBox(
         width: double.infinity,
-        height: 50,
+        height: 50.h,
         child: _buildButton(context),
       ),
     );
@@ -100,14 +102,14 @@ class SocialLoginBtn extends StatelessWidget {
             color: style.iconColor,
             size: 24,
           ),
-          const SizedBox(width: 12),
+           SizedBox(width: 12.w),
         ],
         Expanded(
           child: Text(
             btnTitle,
             style: TextStyle(
               color: style.textColor,
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,

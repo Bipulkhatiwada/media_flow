@@ -30,6 +30,7 @@ dependencies:
   video_thumbnail_imageview: ^0.0.6
   on_audio_query_forked: ^2.9.1
   scrollable_positioned_list: ^0.3.8
+  flutter_screenutil: ^5.9.3
 
 dev_dependencies:
   flutter_test:

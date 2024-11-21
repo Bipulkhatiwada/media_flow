@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Widgets/audio_file_display_card.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 import 'dart:async';
+
+import 'package:media_flow/features/Music/screens/music_player_bar.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key, required this.title});
@@ -50,15 +53,15 @@ class _SearchScreenState extends State<SearchScreen> {
         actions: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 64),
+              padding:  EdgeInsets.symmetric(horizontal: 64.w),
               child: TextField(
                 controller: _controller,
                 autofocus: true,
                 autocorrect: false,
-                decoration: const InputDecoration(
+                decoration:  InputDecoration(
                   hintText: 'Search...',
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 12),
+                  contentPadding: EdgeInsets.symmetric(vertical: 12.h),
                 ),
                 onChanged: _onSearchChanged,
               ),
@@ -108,7 +111,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _buildSearchResults(List<dynamic> filteredFiles) {
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding:  EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
       itemCount: filteredFiles.length,
       cacheExtent: 100,
       physics: const AlwaysScrollableScrollPhysics(),
@@ -144,17 +147,17 @@ class EmptyScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(height: 64),
+         SizedBox(height: 64.h),
         Icon(
           displayIcon,
           size: 80,
           color: Colors.grey,
         ),
-        const SizedBox(height: 16),
+         SizedBox(height: 16.h),
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 18,
+          style:  TextStyle(
+            fontSize: 18.sp,
             color: Colors.grey,
           ),
           textAlign: TextAlign.center,

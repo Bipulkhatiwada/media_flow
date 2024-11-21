@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/features/DocumentViewer/Screen/document_viewer.dart';
 import 'package:media_flow/features/Settings/Screen/settings_screen.dart';
 import 'package:media_flow/features/Music/screens/music_player_screen.dart';
@@ -41,8 +42,8 @@ class _TabBarScreenState extends State<TabBarScreen> {
           backgroundColor: Colors.transparent,
           currentIndex: _currentIndex,
           onTap: _onItemTapped,
-          selectedFontSize: 14,
-          unselectedFontSize: 12,
+          selectedFontSize: 14.sp,
+          unselectedFontSize: 12.sp,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined, size: 30),

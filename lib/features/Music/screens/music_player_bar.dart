@@ -1,5 +1,9 @@
+import 'dart:developer';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/Widgets/control_buttons.dart';
 import 'package:media_flow/Widgets/seek_bar.dart';
@@ -18,10 +22,33 @@ class MusicPlayerControls extends StatefulWidget {
   _MusicPlayerControlsState createState() => _MusicPlayerControlsState();
 }
 
-class _MusicPlayerControlsState extends State<MusicPlayerControls> {
+class _MusicPlayerControlsState extends State<MusicPlayerControls>
+    with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+
+    _animation = Tween<double>(
+      begin: 0,
+      end: 2 * pi,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.linear,
+    ));
+    _controller.repeat();
+  }
+
   @override
   void dispose() {
-    context.read<MusicBloc>().state.audioPlayer.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -42,6 +69,11 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
         backgroundColor: const Color.fromARGB(66, 87, 86, 86),
         body: BlocBuilder<MusicBloc, MusicPlayerState>(
           builder: (context, state) {
+            if (state.audioPlayer.playerState.playing) {
+              _controller.repeat();
+            } else {
+              _controller.stop();
+            }
             return SafeArea(
               child: Column(
                 children: [
@@ -61,36 +93,45 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1DB954).withOpacity(0.1),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.music_note,
-                            color: Color(0xFF1DB954),
-                            size: 64,
-                          ),
+                        AnimatedBuilder(
+                          animation: _animation,
+                          builder: (context, child) {
+                            return Transform.rotate(
+                              angle: _animation.value,
+                              child: Container(
+                                width: 120.w,
+                                height: 120.h,
+                                decoration: BoxDecoration(
+                                  color:
+                                      const Color(0xFF1DB954).withOpacity(0.1),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.music_note,
+                                  color: Color(0xFF1DB954),
+                                  size: 64,
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                        const SizedBox(height: 24),
+                        SizedBox(height: 24.h),
                         Text(
                           state.song?.name ?? "Music not Found",
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
-                            fontSize: 24,
+                            fontSize: 24.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: 12.h),
                         Text(
                           "unknown Artist",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.7),
-                            fontSize: 16,
+                            fontSize: 16.sp,
                           ),
                         ),
                       ],
@@ -109,10 +150,13 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
                             return SeekBar(
                               player: state.audioPlayer,
                               title: state.song?.name,
-                              duration: snapshot.data?.duration ?? Duration.zero,
-                              position: snapshot.data?.position ?? Duration.zero,
-                              bufferedPosition: snapshot.data?.bufferedPosition ??
-                                  Duration.zero,
+                              duration:
+                                  snapshot.data?.duration ?? Duration.zero,
+                              position:
+                                  snapshot.data?.position ?? Duration.zero,
+                              bufferedPosition:
+                                  snapshot.data?.bufferedPosition ??
+                                      Duration.zero,
                               onChangeEnd: state.audioPlayer.seek,
                               song: state.song ?? SongsModel(),
                             );
@@ -145,10 +189,31 @@ class MiniMizedMusicPlayerControls extends StatefulWidget {
 }
 
 class _MiniMizedMusicPlayerControlsState
-    extends State<MiniMizedMusicPlayerControls> {
+    extends State<MiniMizedMusicPlayerControls> with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+
+    _animation = Tween<double>(
+      begin: 0,
+      end: 2 * pi, // Use pi from dart:math
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.linear,
+    ));
+  }
+
   @override
   void dispose() {
-    context.read<MusicBloc>().state.audioPlayer.dispose();
+    _controller.dispose(); // Important: dispose of the animation controller
     super.dispose();
   }
 
@@ -165,86 +230,109 @@ class _MiniMizedMusicPlayerControlsState
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<MusicBloc, MusicPlayerState>(
-      listener: (c, s) {},
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.8),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.8),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.r),
+          topRight: Radius.circular(20.r),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            blurRadius: 10,
+            offset: const Offset(0, -3),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              blurRadius: 10,
-              offset: const Offset(0, -3),
-            ),
-          ],
-        ),
-        child: StreamBuilder<PositionData>(
-          stream: _positionDataStream,
-          builder: (context, snapshot) {
-            return BlocBuilder<MusicBloc, MusicPlayerState>(
-              buildWhen: (previous, current) => previous.song != current.song,
-              builder: (context, state) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Container(
-                        height: 50,
-                        width: 50,
-                        color: Colors.grey.shade800,
-                        child:
-                            const Icon(Icons.music_note, color: Colors.white),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            state.song?.name ?? "No Song Selected",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
+        ],
+      ),
+      child: StreamBuilder<PositionData>(
+        stream: _positionDataStream,
+        builder: (context, snapshot) {
+          return BlocBuilder<MusicBloc, MusicPlayerState>(
+            buildWhen: (previous, current) => previous.song != current.song,
+            builder: (context, state) {
+              // Check player state and control animation accordingly
+              debugPrint("##### rebuild music control #####");
+
+              final audioPlayer = state.audioPlayer;
+              final playerState = audioPlayer.playerState;
+              final isPlaying = playerState.playing;
+
+              if (isPlaying) {
+                debugPrint('Player State: Playing minimized controller');
+                debugPrint(
+                    'Audio Player minimized State Details: ${playerState.toString()}');
+                _controller.repeat();
+              } else {
+                debugPrint('Player State: Not Playing main controller');
+                debugPrint(
+                    'Audio Player minimized State Details: ${playerState.toString()}');
+                _controller.stop();
+              }
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  AnimatedBuilder(
+                    animation: _animation,
+                    builder: (context, child) {
+                      return Transform.rotate(
+                        angle: _animation.value,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(25.r),
+                          child: Container(
+                            height: 50.h,
+                            width: 50.w,
+                            color: Colors.grey.shade800,
+                            child: const Icon(Icons.music_note,
+                                color: Colors.white),
                           ),
-                        ],
-                      ),
+                        ),
+                      );
+                    },
+                  ),
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          state.song?.name ?? "No Song Selected",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 14.0.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 10),
-                    MiniMizedControlButton(
-                      player: state.audioPlayer,
-                      song: state.song ?? SongsModel(),
-                    ),
-                    BlocBuilder<MusicBloc, MusicPlayerState>(
-                      builder: (context, state) {
-                        return IconButton(
-                          icon: const Icon(Icons.arrow_drop_up,
-                                  color: Colors.white),
-                          onPressed: () {
-                            context.read<MusicBloc>().add(ExpandEvent());
-                            NavigationService.expandMusicScreen(context);
-                          },
-                        );
-                      },
-                    )
-                  ],
-                );
-              },
-            );
-          },
-        ),
+                  ),
+                  SizedBox(width: 10.w),
+                  MiniMizedControlButton(
+                    player: state.audioPlayer,
+                    song: state.song ?? SongsModel(),
+                  ),
+                  BlocBuilder<MusicBloc, MusicPlayerState>(
+                    builder: (context, state) {
+                      return IconButton(
+                        icon: const Icon(Icons.arrow_drop_up,
+                            color: Colors.white),
+                        onPressed: () {
+                          context.read<MusicBloc>().add(ExpandEvent());
+                          NavigationService.expandMusicScreen(context);
+                        },
+                      );
+                    },
+                  )
+                ],
+              );
+            },
+          );
+        },
       ),
     );
   }
