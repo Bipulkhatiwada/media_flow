@@ -21,6 +21,9 @@ class NavigationService {
     context.go(RoutePaths.login);
   }
 
+  static void expandMusicScreen(BuildContext context) {
+    context.push(RoutePaths.musicControls);
+  }
   static void navigateToSignUp(BuildContext context, {String? title}) {
     try {
       context.push(

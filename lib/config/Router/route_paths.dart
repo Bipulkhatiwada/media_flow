@@ -8,4 +8,5 @@ class RoutePaths {
   static const String videoPlayer = '/video-player';
   static const String appcoordinator = '/app-coordinator';
   static const String SearchScreen = '/SearchScreen';
+  static const String musicControls = '/MusicControls';
 }

@@ -3,6 +3,7 @@
       "appcoordinator",
       "autocorrect",
       "clearfilter",
-      "cupertino"
+      "cupertino",
+      "rxdart"
    ]
 }

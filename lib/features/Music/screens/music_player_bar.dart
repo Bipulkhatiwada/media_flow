@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/Widgets/control_buttons.dart';
 import 'package:media_flow/Widgets/seek_bar.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
+import 'package:media_flow/core/Navigation/navigation_service.dart';
+// ignore: depend_on_referenced_packages
 import 'package:rxdart/rxdart.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
@@ -11,6 +14,7 @@ class MusicPlayerControls extends StatefulWidget {
   const MusicPlayerControls({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _MusicPlayerControlsState createState() => _MusicPlayerControlsState();
 }
 
@@ -34,32 +38,94 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<MusicBloc, MusicPlayerState>(
-      listener: (c, s) {},
-      child: Container(
-        color: Colors.black,
-        child: StreamBuilder<PositionData>(
-          stream: _positionDataStream,
-          builder: (context, snapshot) {
-            return BlocBuilder<MusicBloc, MusicPlayerState>(
-              buildWhen: (previous, current) => previous.song != current.song,
-              builder: (context, state) {
-                return SeekBar(
-                  player: state.audioPlayer,
-                  title: state.song?.name,
-                  duration: snapshot.data?.duration ?? Duration.zero,
-                  position: snapshot.data?.position ?? Duration.zero,
-                  bufferedPosition:
-                      snapshot.data?.bufferedPosition ?? Duration.zero,
-                  onChangeEnd: state.audioPlayer.seek,
-                  song: state.song ?? SongsModel(),
-                );
-              },
+    return Scaffold(
+        backgroundColor: const Color.fromARGB(66, 87, 86, 86),
+        body: BlocBuilder<MusicBloc, MusicPlayerState>(
+          builder: (context, state) {
+            return SafeArea(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      const Spacer(),
+                      IconButton(
+                        icon: const Icon(Icons.cancel, color: Colors.white),
+                        onPressed: () {
+                          NavigationService.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1DB954).withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.music_note,
+                            color: Color(0xFF1DB954),
+                            size: 64,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          state.song?.name ?? "Music not Found",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          "unknown Artist",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.7),
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    color: Colors.black,
+                    child: StreamBuilder<PositionData>(
+                      stream: _positionDataStream,
+                      builder: (context, snapshot) {
+                        return BlocBuilder<MusicBloc, MusicPlayerState>(
+                          buildWhen: (previous, current) =>
+                              previous.song != current.song,
+                          builder: (context, state) {
+                            return SeekBar(
+                              player: state.audioPlayer,
+                              title: state.song?.name,
+                              duration: snapshot.data?.duration ?? Duration.zero,
+                              position: snapshot.data?.position ?? Duration.zero,
+                              bufferedPosition: snapshot.data?.bufferedPosition ??
+                                  Duration.zero,
+                              onChangeEnd: state.audioPlayer.seek,
+                              song: state.song ?? SongsModel(),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             );
           },
-        ),
-      ),
-    );
+        ));
   }
 }
 
@@ -161,11 +227,17 @@ class _MiniMizedMusicPlayerControlsState
                       player: state.audioPlayer,
                       song: state.song ?? SongsModel(),
                     ),
-                    IconButton(
-                      icon: Icon(Icons.arrow_upward),
-                      onPressed: () => setState(() {
-                        // isExpanded = !isExpanded;
-                      }),
+                    BlocBuilder<MusicBloc, MusicPlayerState>(
+                      builder: (context, state) {
+                        return IconButton(
+                          icon: const Icon(Icons.arrow_drop_up,
+                                  color: Colors.white),
+                          onPressed: () {
+                            context.read<MusicBloc>().add(ExpandEvent());
+                            NavigationService.expandMusicScreen(context);
+                          },
+                        );
+                      },
                     )
                   ],
                 );

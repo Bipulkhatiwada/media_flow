@@ -48,7 +48,7 @@ class _SeekBarState extends State<SeekBar> {
       buildWhen: (previous, current) => previous != current,
       builder: (context, state) {
         return Container(
-          color: Colors.black,
+          color: const Color.fromARGB(66, 56, 55, 55),
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -56,30 +56,6 @@ class _SeekBarState extends State<SeekBar> {
               Flexible(
                 child: Container(
                   padding: const EdgeInsets.only(right: 13.0),
-                  child: Text(
-                    widget.title ?? "Select a Song to Play",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 13.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  //      Marquee(
-                  //   text: state.song?.name ?? "",
-                  //   style: const TextStyle(fontSize: 24, color: Colors.green),
-                  //   scrollAxis: Axis.horizontal,
-                  //   crossAxisAlignment: CrossAxisAlignment.center,
-                  //   blankSpace: 20.0,
-                  //   velocity: 50.0,
-                  //   startPadding: 10.0,
-                  //   accelerationDuration: const Duration(seconds: 1),
-                  //   accelerationCurve: Curves.linear,
-                  //   decelerationDuration: const Duration(milliseconds: 500),
-                  //   decelerationCurve: Curves.easeOut,
-                  // ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -114,8 +90,7 @@ class _SeekBarState extends State<SeekBar> {
                   onChangeEnd: (value) {
                     widget.onChangeEnd(Duration(milliseconds: value.toInt()));
                     if (value ==
-                        widget.duration.inMilliseconds.toDouble() + 10) {
-                    }
+                        widget.duration.inMilliseconds.toDouble() + 10) {}
                   },
                 ),
               ),

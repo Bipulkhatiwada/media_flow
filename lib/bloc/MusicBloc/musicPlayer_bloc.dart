@@ -23,6 +23,7 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<SearchFileEvent>(_filterSong);
     on<ClearFilterSongs>(_clearfilterSong);
     on<ShuffleMusicEvent>(_shuffleMusic);
+    on<ExpandEvent>(_expandMusicControls);
   }
 
   // Method to select a song
@@ -217,6 +218,9 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       debugPrint('Error saving songs: $e');
       emit(state.copyWith(songList: []));
     }
+  }
+  void _expandMusicControls(ExpandEvent event,  Emitter<MusicPlayerState> emit ){
+    emit(state.copyWith(isExpanded: !(state.isExpanded ?? false)));
   }
 
   Future<bool> requestPermissionsAndFetchFiles() async {

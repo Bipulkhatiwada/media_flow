@@ -27,7 +27,6 @@ class _ControlButtonsState extends State<ControlButtons> {
         }
       },
       child: Container(
-        color: Colors.black,
         padding: const EdgeInsets.fromLTRB(16,16,16,0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:media_flow/Widgets/control_buttons.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
+import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 import 'package:media_flow/core/Navigation/navigation_service.dart';
 import 'package:media_flow/features/Music/screens/Nested%20TabBar/nested_tabBar.dart';
 import 'music_player_bar.dart';
@@ -37,6 +37,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    log("######rebuild");
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -90,43 +91,44 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             stops: const [0.0, 0.3, 1.0],
           ),
         ),
-        child: 
-        Column(
+        child: Column(
           children: [
             const Expanded(
               child: SafeArea(
                   child:  NestedTabBar("")),
             ),
             // Player Controls
-            Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 20,
-                    offset: Offset(0, -5),
-                  ),
-                ],
+            BlocBuilder<MusicBloc, MusicPlayerState>(
+                builder: (context, state) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 20,
+                          offset: Offset(0, -5),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                      child: BackdropFilter(
+                        filter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.2),
+                          BlendMode.darken,
+                        ),
+                        child: const MiniMizedMusicPlayerControls(),
+                      ),
+                    ),
+                  );
+                },
               ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-                child: BackdropFilter(
-                  filter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.2),
-                    BlendMode.darken,
-                  ),
-                  child: isExpanded
-                      ? const MusicPlayerControls()
-                      : const MiniMizedMusicPlayerControls(),
-                ),
-              ),
-            ),
           ],
         ),
       ),
