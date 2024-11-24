@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Models/enum/button_type.dart';
-import 'package:media_flow/features/Music/screens/music_player_bar.dart';
 
 class SocialLoginBtn extends StatelessWidget {
   const SocialLoginBtn({

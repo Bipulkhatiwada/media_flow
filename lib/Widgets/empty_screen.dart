@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:media_flow/features/Music/screens/music_player_bar.dart';
 
 class EmptyScreen extends StatelessWidget {
 

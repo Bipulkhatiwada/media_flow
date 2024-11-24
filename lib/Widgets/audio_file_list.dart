@@ -8,6 +8,7 @@ import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:on_audio_query_forked/on_audio_query.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class AudioFileList extends StatefulWidget {
@@ -126,13 +127,15 @@ Widget build(BuildContext context) {
                         color: Colors.white.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
-                        Icons.music_note,
-                        color: song.selected
-                            ? Colors.white
-                            : const Color(0xFF1DB954),
-                        size: 24,
-                      ),
+                  child: 
+                  QueryArtworkWidget(
+                    id: song.songModel?.id ?? 0, 
+                  type: ArtworkType.AUDIO,
+                  nullArtworkWidget: Icon(
+                    Icons.music_note,
+                    color:  song.selected  ? Colors.white : const Color(0xFF1DB954),
+                    size: 24,
+                  )),
                     ),
                      SizedBox(width: 16.w),
                     Expanded(

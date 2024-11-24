@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:media_flow/Boxes/boxes.dart';
 import 'package:media_flow/Models/songs_model.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
@@ -34,6 +35,7 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         name: newSong.name,
         path: newSong.path,
         selected: newSong.name == event.song.name,
+        songModel: newSong.songModel
       );
     }).toList();
     emit(state.copyWith(
@@ -42,8 +44,15 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
           (song) => song.name == event.song.name,
         )));
 
-    await state.audioPlayer
-        .setAudioSource(AudioSource.uri(Uri.parse(state.song?.path ?? "")));
+    await state.audioPlayer.setAudioSource(AudioSource.uri(
+      Uri.parse(state.song?.path ?? ""),
+      tag: MediaItem(
+        id: '${state.songList.hashCode}',
+        album: "<unknown>>",
+        title: state.song?.name ?? "",
+        artUri: Uri.parse('https://example.com/albumart.jpg'),
+      ),
+    ));
     state.audioPlayer.setAllowsExternalPlayback(true);
   }
 
@@ -156,7 +165,8 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
         var audioFiles = musicList.map((file) {
           return SongsModel(
             name: file.displayName,
-            path: file.uri ?? '', // Add null safety
+            path: file.uri ?? '',
+            songModel: file 
           );
         }).toList();
 

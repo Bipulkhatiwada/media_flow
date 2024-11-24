@@ -16,7 +16,7 @@ class VideoPlayerBloc extends Bloc<VideoPlayerEvent, VideoPlayerState> {
   }
    Future<void> _fetchVideo(FetchVideoEvent event, Emitter<VideoPlayerState> emit) async {
     bool permissionStatus = await requestPermissionsAndFetchFiles();
-    var rootDirectory = Directory('/storage/emulated/0/MusicVideo');
+    var rootDirectory = Directory('/storage/emulated/0/myvideos');
     List<File> musicList = await getFiles(rootDirectory);
 
     if (permissionStatus) {

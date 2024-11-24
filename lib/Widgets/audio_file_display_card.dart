@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Models/songs_model.dart';
+import 'package:on_audio_query_forked/on_audio_query.dart';
+
 class AudioFileDisplayCard extends StatelessWidget {
   final SongsModel song;
   final void Function(SongsModel) onPlayAudio;
@@ -47,13 +49,23 @@ class AudioFileDisplayCard extends StatelessWidget {
                     color: Colors.white.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(
-                    Icons.music_note,
-                    color: song.selected ? Colors.white : const Color(0xFF1DB954),
-                    size: 24,
-                  ),
+                  // child: Icon(
+                  //   Icons.music_note,
+                  //   color: song.selected ? Colors.white : const Color(0xFF1DB954),
+                  //   size: 24,
+                  // ),
+                  child: QueryArtworkWidget(
+                      id: song.songModel?.id ?? 0,
+                      type: ArtworkType.AUDIO,
+                      nullArtworkWidget: Icon(
+                        Icons.music_note,
+                        color: song.selected
+                            ? Colors.white
+                            : const Color(0xFF1DB954),
+                        size: 24,
+                      )),
                 ),
-                 SizedBox(width: 16.w),
+                SizedBox(width: 16.w),
                 Expanded(
                   child: Text(
                     song.name ?? 'Unknown',
@@ -69,7 +81,7 @@ class AudioFileDisplayCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                 SizedBox(width: 12.w),
+                SizedBox(width: 12.w),
                 Container(
                   width: 42.w,
                   height: 42.h,

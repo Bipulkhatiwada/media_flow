@@ -31,6 +31,7 @@ dependencies:
   on_audio_query_forked: ^2.9.1
   scrollable_positioned_list: ^0.3.8
   flutter_screenutil: ^5.9.3
+  just_audio_background: ^0.0.1-beta.13
 
 dev_dependencies:
   flutter_test:

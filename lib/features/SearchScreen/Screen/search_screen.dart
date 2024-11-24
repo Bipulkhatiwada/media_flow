@@ -7,7 +7,6 @@ import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
 import 'dart:async';
 
-import 'package:media_flow/features/Music/screens/music_player_bar.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key, required this.title});

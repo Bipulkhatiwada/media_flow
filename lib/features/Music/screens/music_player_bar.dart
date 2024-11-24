@@ -9,6 +9,7 @@ import 'package:media_flow/Widgets/control_buttons.dart';
 import 'package:media_flow/Widgets/seek_bar.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
 import 'package:media_flow/core/Navigation/navigation_service.dart';
+import 'package:on_audio_query_forked/on_audio_query.dart';
 // ignore: depend_on_referenced_packages
 import 'package:rxdart/rxdart.dart';
 import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
@@ -93,27 +94,49 @@ class _MusicPlayerControlsState extends State<MusicPlayerControls>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AnimatedBuilder(
-                          animation: _animation,
-                          builder: (context, child) {
-                            return Transform.rotate(
-                              angle: _animation.value,
-                              child: Container(
-                                width: 120.w,
-                                height: 120.h,
-                                decoration: BoxDecoration(
-                                  color:
-                                      const Color(0xFF1DB954).withOpacity(0.1),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.music_note,
-                                  color: Color(0xFF1DB954),
-                                  size: 64,
-                                ),
-                              ),
-                            );
-                          },
+                        // AnimatedBuilder(
+                        //   animation: _animation,
+                        //   builder: (context, child) {
+                        //     return Transform.rotate(
+                        //       angle: _animation.value,
+                        //       child: Container(
+                        //         width: 120.w,
+                        //         height: 120.h,
+                        //         decoration: BoxDecoration(
+                        //           color:
+                        //               const Color(0xFF1DB954).withOpacity(0.1),
+                        //           shape: BoxShape.circle,
+                        //         ),
+                        //         // child: const Icon(
+                        //         //   Icons.music_note,
+                        //         //   color: Color(0xFF1DB954),
+                        //         //   size: 64,
+                        //         // ),
+
+                        //          child: QueryArtworkWidget(
+                        //           id: state.song?.songModel?.id ?? 0,
+                        //          type: ArtworkType.AUDIO,
+                        //          nullArtworkWidget: const Icon(
+                        //           Icons.music_note,
+                        //           color: Color(0xFF1DB954),
+                        //           size: 64,
+                        //         ),
+                        //          ),
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        QueryArtworkWidget(
+                          id: state.song?.songModel?.id ?? 0,
+                          type: ArtworkType.AUDIO,
+                          artworkHeight: 200.h,
+                          artworkWidth: 200.w,
+                          artworkFit: BoxFit.cover,
+                          nullArtworkWidget: const Icon(
+                            Icons.music_note,
+                            color: Color(0xFF1DB954),
+                            size: 64,
+                          ),
                         ),
                         SizedBox(height: 24.h),
                         Text(
@@ -274,6 +297,16 @@ class _MiniMizedMusicPlayerControlsState
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  // QueryArtworkWidget(
+                  //     id: state.song?.songModel?.id ?? 0,
+                  //     type: ArtworkType.AUDIO,
+                  //     nullArtworkWidget: Icon(
+                  //       Icons.music_note,
+                  //       color: state.song?.selected ?? false
+                  //           ? Colors.white
+                  //           : const Color(0xFF1DB954),
+                  //       size: 16,
+                  //     ))
                   AnimatedBuilder(
                     animation: _animation,
                     builder: (context, child) {
@@ -282,12 +315,17 @@ class _MiniMizedMusicPlayerControlsState
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(25.r),
                           child: Container(
-                            height: 50.h,
-                            width: 50.w,
-                            color: Colors.grey.shade800,
-                            child: const Icon(Icons.music_note,
-                                color: Colors.white),
-                          ),
+                              height: 50.h,
+                              width: 50.w,
+                              color: Colors.grey.shade800,
+                              child:  Icon(
+                                    Icons.music_note,
+                                    color: state.song?.selected ?? false
+                                        ? Colors.white
+                                        : const Color(0xFF1DB954),
+                                    size: 16,
+                                  )
+                                  ),
                         ),
                       );
                     },
