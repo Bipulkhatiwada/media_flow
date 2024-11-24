@@ -44,6 +44,7 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
     await state.audioPlayer
         .setAudioSource(AudioSource.uri(Uri.parse(state.song?.path ?? "")));
+    state.audioPlayer.setAllowsExternalPlayback(true);
   }
 
   void _filterSong(SearchFileEvent event, Emitter<MusicPlayerState> emit) {
@@ -128,49 +129,54 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
   // Fetching all songs
   void _fetchSongs(FetchSongEvent event, Emitter<MusicPlayerState> emit) async {
-  final OnAudioQuery audioQuery = OnAudioQuery();
-  bool permissionStatus = await audioQuery.checkAndRequest();
+    final OnAudioQuery audioQuery = OnAudioQuery();
+    bool permissionStatus = await audioQuery.checkAndRequest();
 
-  if (permissionStatus) {
-    try {
-      List<SongModel> musicList = await audioQuery.querySongs(
-        sortType: null,
-        orderType: OrderType.ASC_OR_SMALLER,
-        uriType: UriType.EXTERNAL,
-        ignoreCase: true,
-      );
-
-      List<AlbumModel> audioList = await audioQuery.queryAlbums();
-      List<AlbumModel> albumList = await audioQuery.queryAlbums();
-      List<ArtistModel> artistsList = await audioQuery.queryArtists();
-      List<PlaylistModel> playlists = await audioQuery.queryPlaylists();
-      List<GenreModel> genres = await audioQuery.queryGenres();
-
-      debugPrint("###### audioList $audioList");
-      debugPrint("###### albumList $albumList");
-      debugPrint("###### artistsList $artistsList");
-      debugPrint("###### playlists $playlists");
-      debugPrint("###### genres $genres");
-
-      var audioFiles = musicList.map((file) {
-        return SongsModel(
-          name: file.displayName,
-          path: file.uri ?? '', // Add null safety
+    if (permissionStatus) {
+      try {
+        List<SongModel> musicList = await audioQuery.querySongs(
+          sortType: null,
+          orderType: OrderType.ASC_OR_SMALLER,
+          uriType: UriType.EXTERNAL,
+          ignoreCase: true,
         );
-      }).toList();
 
-      audioFiles.sort((a, b) =>
-          (a.name ?? '').toLowerCase().compareTo((b.name ?? '').toLowerCase()));
+        List<AlbumModel> audioList = await audioQuery.queryAlbums();
+        List<AlbumModel> albumList = await audioQuery.queryAlbums();
+        List<ArtistModel> artistsList = await audioQuery.queryArtists();
+        List<PlaylistModel> playlists = await audioQuery.queryPlaylists();
+        List<GenreModel> genres = await audioQuery.queryGenres();
 
-      emit(state.copyWith(songList: audioFiles, albumList: albumList, artistList: artistsList, genreList: genres, playLists: playlists));
-    } catch (e) {
-      debugPrint("Error fetching songs: $e");
-     
+        debugPrint("###### audioList $audioList");
+        debugPrint("###### albumList $albumList");
+        debugPrint("###### artistsList $artistsList");
+        debugPrint("###### playlists $playlists");
+        debugPrint("###### genres $genres");
+
+        var audioFiles = musicList.map((file) {
+          return SongsModel(
+            name: file.displayName,
+            path: file.uri ?? '', // Add null safety
+          );
+        }).toList();
+
+        audioFiles.sort((a, b) => (a.name ?? '')
+            .toLowerCase()
+            .compareTo((b.name ?? '').toLowerCase()));
+
+        emit(state.copyWith(
+            songList: audioFiles,
+            albumList: albumList,
+            artistList: artistsList,
+            genreList: genres,
+            playLists: playlists));
+      } catch (e) {
+        debugPrint("Error fetching songs: $e");
+      }
+    } else {
+      debugPrint("Permission denied");
     }
-  } else {
-    debugPrint("Permission denied");
   }
-}
 
   void _stopSong(StopSongEvent event, Emitter<MusicPlayerState> emit) async {
     emit(state.copyWith(song: SongsModel()));
@@ -219,7 +225,8 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       emit(state.copyWith(songList: []));
     }
   }
-  void _expandMusicControls(ExpandEvent event,  Emitter<MusicPlayerState> emit ){
+
+  void _expandMusicControls(ExpandEvent event, Emitter<MusicPlayerState> emit) {
     emit(state.copyWith(isExpanded: !(state.isExpanded ?? false)));
   }
 
