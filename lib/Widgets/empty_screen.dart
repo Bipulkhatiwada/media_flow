@@ -40,7 +40,7 @@ class EmptyScreen extends StatelessWidget {
               ),
               child: Icon(
                 displayIcon,
-                color: Color(0xFF1DB954),
+                color: const Color(0xFF1DB954),
                 size: 80,
               ),
             ),

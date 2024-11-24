@@ -91,7 +91,7 @@ class DynamicAudioFolderView extends StatelessWidget {
             ),
             child: const Icon(
               Icons.music_note,
-              color: const Color(0xFF1DB954),
+              color: Color(0xFF1DB954),
               size: 64,
             ),
           ),

@@ -136,10 +136,10 @@ class EmptyScreen extends StatelessWidget {
   final IconData displayIcon;
 
   const EmptyScreen({
-    Key? key,
+    super.key,
     required this.title,
     required this.displayIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

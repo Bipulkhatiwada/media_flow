@@ -7,7 +7,7 @@ class AudioFileDisplayCard extends StatelessWidget {
   final SongsModel song;
   final void Function(SongsModel) onPlayAudio;
 
-  const AudioFileDisplayCard({
+  const AudioFileDisplayCard({super.key, 
     required this.song,
     required this.onPlayAudio,
   });
