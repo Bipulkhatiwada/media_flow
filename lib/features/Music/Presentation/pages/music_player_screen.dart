@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_bloc.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_event.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_state.dart';
 import 'package:media_flow/core/Navigation/navigation_service.dart';
-import 'package:media_flow/features/Music/screens/Nested%20TabBar/nested_tabBar.dart';
+import 'package:media_flow/features/Music/Presentation/pages/Nested%20TabBar/nested_tabBar.dart';
 import 'music_player_bar.dart';
 
 class MusicPlayerScreen extends StatefulWidget {

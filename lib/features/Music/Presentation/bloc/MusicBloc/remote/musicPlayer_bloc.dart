@@ -7,14 +7,17 @@ import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:media_flow/Boxes/boxes.dart';
-import 'package:media_flow/Models/songs_model.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
-import 'package:on_audio_query_forked/on_audio_query.dart';
+import 'package:media_flow/features/Music/Data/models/songs_model.dart';
+import 'package:media_flow/features/Music/Domain/usecases/get_device_songs.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_event.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_state.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
-  MusicBloc() : super(MusicPlayerState()) {
+
+    final GetDeviceSongsUseCases _getDeviceSongsUseCases;
+
+  MusicBloc(this._getDeviceSongsUseCases) : super(MusicPlayerState()) {
     on<SelectSongEvent>(_selectSong);
     on<SaveSongEvent>(_saveSongs);
     on<FetchSongEvent>(_fetchSongs);
@@ -138,53 +141,9 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
 
   // Fetching all songs
   void _fetchSongs(FetchSongEvent event, Emitter<MusicPlayerState> emit) async {
-    final OnAudioQuery audioQuery = OnAudioQuery();
-    bool permissionStatus = await audioQuery.checkAndRequest();
-
-    if (permissionStatus) {
-      try {
-        List<SongModel> musicList = await audioQuery.querySongs(
-          sortType: null,
-          orderType: OrderType.ASC_OR_SMALLER,
-          uriType: UriType.EXTERNAL,
-          ignoreCase: true,
-        );
-
-        List<AlbumModel> audioList = await audioQuery.queryAlbums();
-        List<AlbumModel> albumList = await audioQuery.queryAlbums();
-        List<ArtistModel> artistsList = await audioQuery.queryArtists();
-        List<PlaylistModel> playlists = await audioQuery.queryPlaylists();
-        List<GenreModel> genres = await audioQuery.queryGenres();
-
-        debugPrint("###### audioList $audioList");
-        debugPrint("###### albumList $albumList");
-        debugPrint("###### artistsList $artistsList");
-        debugPrint("###### playlists $playlists");
-        debugPrint("###### genres $genres");
-
-        var audioFiles = musicList.map((file) {
-          return SongsModel(
-            name: file.displayName,
-            path: file.uri ?? '',
-            songModel: file 
-          );
-        }).toList();
-
-        audioFiles.sort((a, b) => (a.name ?? '')
-            .toLowerCase()
-            .compareTo((b.name ?? '').toLowerCase()));
-
-        emit(state.copyWith(
-            songList: audioFiles,
-            albumList: albumList,
-            artistList: artistsList,
-            genreList: genres,
-            playLists: playlists));
-      } catch (e) {
-        debugPrint("Error fetching songs: $e");
-      }
-    } else {
-      debugPrint("Permission denied");
+    final audioList = await _getDeviceSongsUseCases();
+    if (audioList.isNotEmpty){
+            emit(state.copyWith(songList: audioList));
     }
   }
 

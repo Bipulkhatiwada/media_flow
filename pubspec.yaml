@@ -32,6 +32,7 @@ dependencies:
   scrollable_positioned_list: ^0.3.8
   flutter_screenutil: ^5.9.3
   just_audio_background: ^0.0.1-beta.13
+  get_it: ^8.0.2
 
 dev_dependencies:
   flutter_test:

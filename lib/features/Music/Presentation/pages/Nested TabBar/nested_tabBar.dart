@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:media_flow/Widgets/audio_file_list.dart';
 import 'package:media_flow/Widgets/dynamic_audio_folder.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_bloc.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_event.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_state.dart';
 
 class NestedTabBar extends StatefulWidget {
   const NestedTabBar(this.outerTab, {super.key});

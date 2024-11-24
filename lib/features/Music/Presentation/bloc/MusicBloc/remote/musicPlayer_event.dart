@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:media_flow/Models/songs_model.dart';
+import 'package:media_flow/features/Music/Data/models/songs_model.dart';
 
 class MusicPlayerEvent extends Equatable {
   const MusicPlayerEvent();

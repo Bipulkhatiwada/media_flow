@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:media_flow/Data/SecuredStorage/secure_storage.dart';
 import 'package:media_flow/Models/enum/secure_torage_keys.dart';
-import 'package:media_flow/features/Music/screens/tabBar_screen.dart';
+import 'package:media_flow/features/Music/Presentation/pages/tabBar_screen.dart';
 import 'package:media_flow/features/auth/screens/login_screen.dart';
 
 class AppCoordinator extends StatelessWidget {

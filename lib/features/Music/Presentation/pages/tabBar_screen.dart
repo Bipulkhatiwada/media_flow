@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/features/DocumentViewer/Screen/document_viewer.dart';
 import 'package:media_flow/features/Settings/Screen/settings_screen.dart';
-import 'package:media_flow/features/Music/screens/music_player_screen.dart';
+import 'package:media_flow/features/Music/Presentation/pages/music_player_screen.dart';
 import 'package:media_flow/features/Videos/Screens/videos_list_screen.dart';
 
 class TabBarScreen extends StatefulWidget {

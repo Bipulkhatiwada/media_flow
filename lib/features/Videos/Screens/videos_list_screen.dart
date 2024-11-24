@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:media_flow/Models/video_model.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_bloc.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_event.dart';
 import 'package:media_flow/bloc/VideoPlayerBloc/video_player_bloc.dart';
 import 'package:media_flow/core/Navigation/navigation_service.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:media_flow/Models/songs_model.dart';
+import 'package:media_flow/features/Music/Data/models/songs_model.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
 
 class AudioFileDisplayCard extends StatelessWidget {

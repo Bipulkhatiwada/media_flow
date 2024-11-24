@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:media_flow/Models/songs_model.dart';
+import 'package:media_flow/features/Music/Data/models/songs_model.dart';
 import 'package:media_flow/Widgets/empty_screen.dart';
 import 'package:media_flow/Widgets/expandable_fab.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_bloc.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_event.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_state.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';

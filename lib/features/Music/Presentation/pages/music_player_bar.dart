@@ -3,16 +3,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:media_flow/Models/songs_model.dart';
+import 'package:media_flow/features/Music/Data/models/songs_model.dart';
 import 'package:media_flow/Widgets/control_buttons.dart';
 import 'package:media_flow/Widgets/seek_bar.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_event.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_event.dart';
 import 'package:media_flow/core/Navigation/navigation_service.dart';
 import 'package:on_audio_query_forked/on_audio_query.dart';
 // ignore: depend_on_referenced_packages
 import 'package:rxdart/rxdart.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_bloc.dart';
-import 'package:media_flow/bloc/MusicBloc/musicPlayer_state.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_bloc.dart';
+import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_state.dart';
 
 class MusicPlayerControls extends StatefulWidget {
   const MusicPlayerControls({super.key});
