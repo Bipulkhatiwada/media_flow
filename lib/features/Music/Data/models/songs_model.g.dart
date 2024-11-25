@@ -20,19 +20,22 @@ class SongsModelAdapter extends TypeAdapter<SongsModel> {
       name: fields[1] as String?,
       path: fields[2] as String?,
       selected: fields[3] as bool,
+      songModel: fields[4] as SongModel?,
     );
   }
 
   @override
   void write(BinaryWriter writer, SongsModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
       ..write(obj.path)
       ..writeByte(3)
-      ..write(obj.selected);
+      ..write(obj.selected)
+      ..writeByte(4)
+      ..write(obj.songModel);
   }
 
   @override

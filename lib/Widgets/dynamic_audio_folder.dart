@@ -194,7 +194,7 @@ class DynamicAudioFolderView extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
-            Color(0xFF282828),
+            Color.fromARGB(255, 40, 40, 40),
             Color(0xFF1E1E1E),
           ],
           begin: Alignment.topLeft,

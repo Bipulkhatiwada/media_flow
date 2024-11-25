@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:media_flow/features/Music/Data/models/songs_model.dart';
+import 'package:media_flow/features/Music/Domain/usecases/delete_playlist_songs.dart';
 import 'package:media_flow/features/Music/Domain/usecases/get_device_songs.dart';
+import 'package:media_flow/features/Music/Domain/usecases/get_playlist_songs.dart';
 import 'package:media_flow/features/Music/Domain/usecases/save_songs.dart';
 import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_event.dart';
 import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_state.dart';
@@ -14,13 +16,17 @@ import 'package:permission_handler/permission_handler.dart';
 
 class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
   final GetDeviceSongsUseCases _getDeviceSongsUseCases;
+  final GetPlaylistSongsUseCases _getPlaylistSongsUseCases;
+  final DeleteDeviceSongsUseCases _deleteDeviceSongsUseCases;
   final SaveSongsUseCases _saveSongsUseCases;
 
-  MusicBloc(this._getDeviceSongsUseCases, this._saveSongsUseCases)
+  MusicBloc(this._getDeviceSongsUseCases, this._saveSongsUseCases, this._deleteDeviceSongsUseCases, this._getPlaylistSongsUseCases)
       : super(MusicPlayerState()) {
     on<SelectSongEvent>(_selectSong);
     on<SaveSongEvent>(_saveSongs);
     on<FetchSongEvent>(_fetchSongs);
+    on<FetchPlaylistSongEvent>(_fetchPlaylistSongs);
+    on<DeletePlaylistSongEvent>(_deletePlaylistSongs);
     on<NextSongEvent>(_nextSongEvent);
     on<PrevSongEvent>(_previousSongEvent);
     on<StopSongEvent>(_stopSong);
@@ -37,6 +43,18 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
       emit(state.copyWith(songList: audioList));
     }
   }
+
+   void _fetchPlaylistSongs(FetchPlaylistSongEvent event, Emitter<MusicPlayerState> emit) async {
+    final audioList = await _getPlaylistSongsUseCases();
+    if (audioList.isNotEmpty) {
+      emit(state.copyWith(playListFile: audioList));
+    }
+  }
+   void _deletePlaylistSongs(DeletePlaylistSongEvent event, Emitter<MusicPlayerState> emit) async {
+    final audioList = await _deleteDeviceSongsUseCases();
+     emit(state.copyWith(playListFile: audioList));
+  }
+  
 
   void _saveSongs(SaveSongEvent event, Emitter<MusicPlayerState> emit) async {
     final audioList = await _saveSongsUseCases();

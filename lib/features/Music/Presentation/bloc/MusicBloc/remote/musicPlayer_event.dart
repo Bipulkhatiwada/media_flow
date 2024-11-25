@@ -30,6 +30,9 @@ class SaveSongEvent extends MusicPlayerEvent {
 
 class FetchSongEvent extends MusicPlayerEvent {}
 
+class FetchPlaylistSongEvent extends MusicPlayerEvent {}
+class DeletePlaylistSongEvent extends MusicPlayerEvent {}
+
 class ExpandEvent extends MusicPlayerEvent {}
 
 class StopSongEvent extends MusicPlayerEvent {}

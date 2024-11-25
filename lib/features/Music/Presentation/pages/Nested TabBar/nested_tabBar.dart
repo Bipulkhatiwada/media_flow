@@ -24,6 +24,7 @@ class _NestedTabBarState extends State<NestedTabBar>
     super.initState();
     _tabController = TabController(length: 5, vsync: this);
     context.read<MusicBloc>().add(FetchSongEvent());
+    context.read<MusicBloc>().add(FetchPlaylistSongEvent());
   }
 
   @override
@@ -70,9 +71,7 @@ class _NestedTabBarState extends State<NestedTabBar>
                 controller: _tabController,
                 children: [
                   const AudioFileList(),
-                  DynamicAudioFolderView(
-                    playlists: state.playLists ?? [],
-                  ),
+                  const AudioFileList(listType: "playlist"),
                   DynamicAudioFolderView(
                     albums: state.albumList ?? [],
                   ),

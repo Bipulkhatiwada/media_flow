@@ -12,7 +12,8 @@ import 'package:on_audio_query_forked/on_audio_query.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class AudioFileList extends StatefulWidget {
-  const AudioFileList({super.key});
+  const AudioFileList({super.key, this.listType = ""});
+  final String listType;
 
   @override
   _AudioFileListState createState() => _AudioFileListState();
@@ -27,30 +28,41 @@ class _AudioFileListState extends State<AudioFileList> {
   }
 
   @override
-  
-// Usage in your main widget:
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: const Color(0xFF1E1E1E),
-    body: BlocBuilder<MusicBloc, MusicPlayerState>(
-      builder: (context, state) {
-        if (state.songList == null || state.songList!.isEmpty) {
-          return const EmptyScreen(
-            title: "Your Audio list is empty",
-            displayIcon: Icons.music_note,
-            descriptionText: "Click add Button to add the files",
-          );
-        } else {
-          return _buildAudioList(context, state.songList!);
-        }
-      },
-    ),
-    floatingActionButton: ExpandableFab(
-      onAddFiles: _fetchAudioFiles,
-      onShuffle: _shuffleMusic,
-    ),
-  );
-}
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF1E1E1E),
+      body: BlocBuilder<MusicBloc, MusicPlayerState>(
+        builder: (context, state) {
+          final List<SongsModel> list = widget.listType == "playlist"
+              ? (state.playListFile ?? [])
+              : (state.songList ?? []);
+          if (list.isEmpty) {
+            return const EmptyScreen(
+              title: "Your Audio list is empty",
+              displayIcon: Icons.music_note,
+              descriptionText: "Click add Button to add the files",
+            );
+          } else {
+            return _buildAudioList(context, list);
+          }
+        },
+      ),
+      floatingActionButton: widget.listType == "playlist"
+          ? 
+          // FloatingActionButton(
+          //     backgroundColor: Colors.green,
+          //     foregroundColor: Colors.white,
+          //     onPressed: () {
+          //      _fetchAudioFiles();
+          //     },
+          //     child: const Icon(Icons.add),
+          //   )
+
+          ExpandableFab(onAddFiles:_fetchAudioFiles,ondelete: _deleteFiles,)
+          : null,
+    );
+  }
+
   Widget _buildAudioList(BuildContext context, List<SongsModel> audioFiles) {
     return BlocListener<MusicBloc, MusicPlayerState>(
       listener: (context, state) {
@@ -80,12 +92,11 @@ Widget build(BuildContext context) {
             ),
           ),
           child: ScrollablePositionedList.builder(
-            padding:  EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
             itemCount: audioFiles.length,
             itemBuilder: (context, index) => _buildAudioCard(audioFiles[index]),
             itemScrollController: itemScrollController,
-          )
-          ),
+          )),
     );
   }
 
@@ -127,17 +138,18 @@ Widget build(BuildContext context) {
                         color: Colors.white.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
-                  child: 
-                  QueryArtworkWidget(
-                    id: song.songModel?.id ?? 0, 
-                  type: ArtworkType.AUDIO,
-                  nullArtworkWidget: Icon(
-                    Icons.music_note,
-                    color:  song.selected  ? Colors.white : const Color(0xFF1DB954),
-                    size: 24,
-                  )),
+                      child: QueryArtworkWidget(
+                          id: song.songModel?.id ?? 0,
+                          type: ArtworkType.AUDIO,
+                          nullArtworkWidget: Icon(
+                            Icons.music_note,
+                            color: song.selected
+                                ? Colors.white
+                                : const Color(0xFF1DB954),
+                            size: 24,
+                          )),
                     ),
-                     SizedBox(width: 16.w),
+                    SizedBox(width: 16.w),
                     Expanded(
                       child: Text(
                         song.name ?? 'Unknown',
@@ -154,7 +166,7 @@ Widget build(BuildContext context) {
                         ),
                       ),
                     ),
-                     SizedBox(width: 12.w),
+                    SizedBox(width: 12.w),
                     Container(
                       width: 42.w,
                       height: 42.h,
@@ -187,7 +199,6 @@ Widget build(BuildContext context) {
     );
   }
 
-
   void _playAudio(SongsModel song) {
     context.read<MusicBloc>().add(SelectSongEvent(song: song));
   }
@@ -204,7 +215,7 @@ Widget build(BuildContext context) {
     }
   }
 
-  void _shuffleMusic() async {
-    context.read<MusicBloc>().add(const ShuffleMusicEvent(toggleShuffle: true));
+  void _deleteFiles() async {
+    context.read<MusicBloc>().add(DeletePlaylistSongEvent());
   }
 }

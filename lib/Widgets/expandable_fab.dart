@@ -6,12 +6,12 @@ import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/mus
 
 class ExpandableFab extends StatefulWidget {
   final void Function() onAddFiles;
-  final void Function() onShuffle;
+  final void Function() ondelete;
 
   const ExpandableFab({
     super.key,
     required this.onAddFiles,
-    required this.onShuffle,
+    required this.ondelete,
   });
 
   @override
@@ -105,10 +105,10 @@ class _ExpandableFabState extends State<ExpandableFab>
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildButton(
-                  btnType: "shuffle",
-                  onPressed: widget.onShuffle,
-                  icon: Icons.shuffle,
-                  tooltip: 'Shuffle',
+                  btnType: "delete",
+                  onPressed: widget.ondelete,
+                  icon: Icons.delete,
+                  tooltip: 'Delete',
                 ),
                  SizedBox(height: 12.h),
                 _buildButton(
