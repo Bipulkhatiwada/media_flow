@@ -3,21 +3,21 @@ import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:media_flow/Boxes/boxes.dart';
 import 'package:media_flow/features/Music/Data/models/songs_model.dart';
 import 'package:media_flow/features/Music/Domain/usecases/get_device_songs.dart';
+import 'package:media_flow/features/Music/Domain/usecases/save_songs.dart';
 import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_event.dart';
 import 'package:media_flow/features/Music/Presentation/bloc/MusicBloc/remote/musicPlayer_state.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
+  final GetDeviceSongsUseCases _getDeviceSongsUseCases;
+  final SaveSongsUseCases _saveSongsUseCases;
 
-    final GetDeviceSongsUseCases _getDeviceSongsUseCases;
-
-  MusicBloc(this._getDeviceSongsUseCases) : super(MusicPlayerState()) {
+  MusicBloc(this._getDeviceSongsUseCases, this._saveSongsUseCases)
+      : super(MusicPlayerState()) {
     on<SelectSongEvent>(_selectSong);
     on<SaveSongEvent>(_saveSongs);
     on<FetchSongEvent>(_fetchSongs);
@@ -30,16 +30,30 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     on<ExpandEvent>(_expandMusicControls);
   }
 
+// Fetching all songs
+  void _fetchSongs(FetchSongEvent event, Emitter<MusicPlayerState> emit) async {
+    final audioList = await _getDeviceSongsUseCases();
+    if (audioList.isNotEmpty) {
+      emit(state.copyWith(songList: audioList));
+    }
+  }
+
+  void _saveSongs(SaveSongEvent event, Emitter<MusicPlayerState> emit) async {
+    final audioList = await _saveSongsUseCases();
+    if (audioList.isNotEmpty) {
+      emit(state.copyWith(songList: audioList));
+    }
+  }
+
   // Method to select a song
   void _selectSong(
       SelectSongEvent event, Emitter<MusicPlayerState> emit) async {
     final updatedList = state.songList?.map((newSong) {
       return SongsModel(
-        name: newSong.name,
-        path: newSong.path,
-        selected: newSong.name == event.song.name,
-        songModel: newSong.songModel
-      );
+          name: newSong.name,
+          path: newSong.path,
+          selected: newSong.name == event.song.name,
+          songModel: newSong.songModel);
     }).toList();
     emit(state.copyWith(
         songList: updatedList?.toList(),
@@ -82,15 +96,14 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     if (songList == null || songList.isEmpty) {
       return;
     }
-
-    final randomIndex = getRandomInt(0, songListLength - 1);
-    final song = songList[randomIndex];
-    emit(state.copyWith(
-        song: song,
-        isShuffledOn: event.toggleShuffle
-            ? !(state.isShuffledOn ?? true)
-            : (state.isShuffledOn ?? true)));
-    add(SelectSongEvent(song: song));
+    if (event.toggleShuffle == false) {
+      emit(state.copyWith(isShuffledOn: event.toggleShuffle));
+    } else {
+      final randomIndex = getRandomInt(0, songListLength - 1);
+      final song = songList[randomIndex];
+      emit(state.copyWith(song: song, isShuffledOn: event.toggleShuffle));
+      add(SelectSongEvent(song: song));
+    }
   }
 
   int getRandomInt(int min, int max) {
@@ -139,60 +152,8 @@ class MusicBloc extends Bloc<MusicPlayerEvent, MusicPlayerState> {
     add(SelectSongEvent(song: song));
   }
 
-  // Fetching all songs
-  void _fetchSongs(FetchSongEvent event, Emitter<MusicPlayerState> emit) async {
-    final audioList = await _getDeviceSongsUseCases();
-    if (audioList.isNotEmpty){
-            emit(state.copyWith(songList: audioList));
-    }
-  }
-
   void _stopSong(StopSongEvent event, Emitter<MusicPlayerState> emit) async {
     emit(state.copyWith(song: SongsModel()));
-  }
-
-  void _saveSongs(SaveSongEvent event, Emitter<MusicPlayerState> emit) {
-    // Convert event songs to SongsModel objects
-    var audioFiles = event.songs.map((file) {
-      return SongsModel(
-        name: file.name,
-        path: file.path ?? '',
-      );
-    }).toList();
-
-    final box = Hive.box<SongsModel>('songs');
-    final existingSongs = box.values.toList().cast<SongsModel>();
-
-    // Filter out songs that are already in the box
-    var duplicateFiles = <SongsModel>[];
-    var newFiles = <SongsModel>[];
-
-    for (var file in audioFiles) {
-      bool isDuplicate = existingSongs
-          .any((song) => song.name == file.name && song.path == file.path);
-      if (isDuplicate) {
-        duplicateFiles.add(file);
-      } else {
-        newFiles.add(file);
-      }
-    }
-
-    try {
-      if (newFiles.isNotEmpty) {
-        box.addAll(newFiles); // Add only new files
-      }
-
-      final songs = Boxes.getData().values.toList().cast<SongsModel>();
-      emit(state.copyWith(songList: songs));
-
-      if (duplicateFiles.isNotEmpty) {
-        debugPrint(
-            'Error: Duplicate files detected: ${duplicateFiles.map((e) => e.name).join(', ')}');
-      }
-    } catch (e) {
-      debugPrint('Error saving songs: $e');
-      emit(state.copyWith(songList: []));
-    }
   }
 
   void _expandMusicControls(ExpandEvent event, Emitter<MusicPlayerState> emit) {

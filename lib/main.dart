@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         splitScreenMode: true,
         child: MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => MusicBloc(sl())),
+            BlocProvider(create: (context) => MusicBloc(sl(), sl())),
             BlocProvider(create: (context) => VideoPlayerBloc())
           ],
           child: MaterialApp.router(

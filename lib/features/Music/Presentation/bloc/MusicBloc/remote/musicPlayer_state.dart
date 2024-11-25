@@ -7,6 +7,7 @@ class MusicPlayerState extends Equatable {
   final SongsModel? song;
   final List<SongsModel>? songList;
   final List<SongsModel>? filteredFileList;
+  final List<SongsModel>? playListFile;
   final AudioPlayer audioPlayer;
   final bool? isShuffledOn;
 
@@ -25,6 +26,7 @@ class MusicPlayerState extends Equatable {
     this.genreList,
     this.playLists,
     this.filteredFileList,
+    this.playListFile,
     this.isExpanded,
     AudioPlayer? audioPlayer,
     this.isShuffledOn = false,
@@ -34,6 +36,7 @@ class MusicPlayerState extends Equatable {
     SongsModel? song,
     List<SongsModel>? songList,
     List<SongsModel>? filteredFileList,
+    List<SongsModel>? playListFile,
     bool? isSearching,
     AudioPlayer? audioPlayer,
     bool? isShuffledOn,
@@ -47,6 +50,7 @@ class MusicPlayerState extends Equatable {
         song: song ?? this.song,
         songList: songList ?? this.songList,
         filteredFileList: filteredFileList ?? this.filteredFileList,
+        playListFile: playListFile ?? this.playListFile,
         audioPlayer: audioPlayer ?? this.audioPlayer,
         isShuffledOn: isShuffledOn ?? this.isShuffledOn,
         albumList: albumList ?? this.albumList,
@@ -59,5 +63,5 @@ class MusicPlayerState extends Equatable {
 
   @override
   List<Object?> get props =>
-      [song, songList, filteredFileList, audioPlayer, isShuffledOn, albumList, artistList, playLists, genreList, isExpanded ];
+      [song, songList, filteredFileList, audioPlayer, isShuffledOn, albumList, artistList, playLists, genreList, isExpanded, playListFile ];
 }

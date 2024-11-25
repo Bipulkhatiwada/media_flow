@@ -56,10 +56,32 @@ class _SeekBarState extends State<SeekBar> {
             children: [
               Flexible(
                 child: Container(
-                  padding:  EdgeInsets.only(right: 13.0.h),
+                  padding: EdgeInsets.only(right: 13.0.h),
                 ),
               ),
-             SizedBox(height: 16.h),
+              SizedBox(height: 16.h),
+              Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.end, // Aligns children to the end
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons
+                          .shuffle, 
+                      color: state.isShuffledOn == true
+                          ? Colors.green
+                          : Colors.white,
+                    ),
+                    iconSize: 24,
+                    onPressed: () {
+                      context.read<MusicBloc>().add(
+                            ShuffleMusicEvent(
+                                toggleShuffle: !(state.isShuffledOn ?? false)),
+                          );
+                    },
+                  ),
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
